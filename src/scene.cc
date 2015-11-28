@@ -21,6 +21,7 @@
 #include <QGraphicsRectItem>
 #include <QAction>
 #include <QElapsedTimer>
+#include <QCryptographicHash>
 #include <QDebug>
 
 #include "tango-colors.hh"
@@ -51,7 +52,7 @@ CScene::CScene(const QList<CNode*> & p_nodes) : QGraphicsScene()
     item->setRect(x, y, w, h);
     item->setPos(x, y);
     item->setNode(node);
-    item->setBrush(pickColor(node->level()));
+    item->setBrush(pickColor(qHash(node->label())));
     item->setToolTip(node->toString());
     item->setFlags(QGraphicsItem::ItemIsSelectable);
 
