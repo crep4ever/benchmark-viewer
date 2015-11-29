@@ -34,19 +34,23 @@ CScene::CScene(const QList<CNode*> & p_nodes) : QGraphicsScene()
   QElapsedTimer timer;
   timer.start();
 
+  const int h = 10;
+  const int margin = 2;
+
   const qint64 origin = start().toMSecsSinceEpoch();
+  const qint64 end    = stop().toMSecsSinceEpoch();
+
+  setSceneRect(0, 0, end - origin, depth() * (h + margin) + h);
+
   foreach (CNode* node, m_nodes)
   {
-    const int w = (int) node->duration();
-    const int h = 100;
-    const int margin = 100;
-
+    const int w = node->duration();
     const int x = node->start().toMSecsSinceEpoch() - origin;
     const int y = node->level() * (margin + h);
 
     CGraphicsNodeItem *item = new CGraphicsNodeItem();
-    item->setRect(x, y, w, h);
     item->setPos(x, y);
+    item->setRect(0, 0, w, h);
     item->setNode(node);
     item->setBrush(pickColor(qHash(node->label())));
     item->setPen(Qt::NoPen);
@@ -55,7 +59,7 @@ CScene::CScene(const QList<CNode*> & p_nodes) : QGraphicsScene()
 
     QGraphicsSimpleTextItem *label = new QGraphicsSimpleTextItem(node->label());
     label->setParentItem(item);
-    label->setPos(x, y);
+    label->setPos(0, 0); // coordinates relative to parent item
     label->setBrush(_TangoAluminium1);
     label->setFlags(QGraphicsItem::ItemIgnoresTransformations);
 
@@ -98,7 +102,16 @@ QDateTime CScene::start() const
     return QDateTime();
   }
 
-  return m_nodes[0]->start();
+  QDateTime first = m_nodes[0]->start();
+  foreach (CNode *node, m_nodes)
+  {
+    if (node->level() == 0 && node->start() < first)
+    {
+      first = node->start();
+    }
+  }
+
+  return first;
 }
 
 QDateTime CScene::stop() const
@@ -122,4 +135,17 @@ QDateTime CScene::stop() const
 qint64 CScene::duration() const
 {
   return stop().toMSecsSinceEpoch() - start().toMSecsSinceEpoch();
+}
+
+int CScene::depth() const
+{
+  int depth = 0;
+  foreach (CNode *node, m_nodes)
+  {
+    if (node->level() > depth)
+    {
+      depth = node->level();
+    }
+  }
+  return depth;
 }

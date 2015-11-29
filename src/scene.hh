@@ -35,6 +35,7 @@ public:
   QDateTime start() const;
   QDateTime stop() const;
   qint64 duration() const;
+  int depth() const;
 
 private slots:
 void nodeLeftClicked();
