@@ -27,8 +27,9 @@
 #include <QDebug>
 
 #include "scene.hh"
+#include "node.hh"
+#include "graphics-node-item.hh"
 #include "timeline-overlay.hh"
-
 
 CTimeLineView::CTimeLineView(CScene *p_scene) : QGraphicsView()
 , m_zoomInAct(0)
@@ -107,7 +108,32 @@ void CTimeLineView::mousePressEvent(QMouseEvent *event)
 {
   if (QGraphicsItem *item = itemAt(event->pos()))
   {
+    // restore style of previous item
+    CGraphicsNodeItem *previous = dynamic_cast<CGraphicsNodeItem*>(m_currentSceneItem);
+    if (previous)
+    {
+      previous->setOpacity(1.0);
+    }
+
+    // clicked item becomes current
     m_currentSceneItem = item;
+    CGraphicsNodeItem *nodeItem = dynamic_cast<CGraphicsNodeItem*>(item);
+    if (nodeItem)
+    {
+      nodeItem->setOpacity(0.8);
+      emit(currentNodeChanged(nodeItem->node()));
+    }
+  }
+  else
+  {
+    // restore style of previous item
+    CGraphicsNodeItem *previous = dynamic_cast<CGraphicsNodeItem*>(m_currentSceneItem);
+    if (previous)
+    {
+      previous->setOpacity(1.0);
+    }
+    m_currentSceneItem = 0;
+    emit(currentNodeChanged(0));
   }
 
   QGraphicsView::mousePressEvent(event);

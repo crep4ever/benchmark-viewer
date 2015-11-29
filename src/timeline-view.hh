@@ -26,6 +26,7 @@ class QWheelEvent;
 class QMouseEvent;
 class CScene;
 class CTimeLineOverlay;
+class CNode;
 
 class CTimeLineView : public QGraphicsView
 {
@@ -44,6 +45,9 @@ protected:
 public slots:
 void zoomIn();
 void zoomOut();
+
+signals:
+void currentNodeChanged(CNode * p_node);
 
 private:
   // zoom actions
