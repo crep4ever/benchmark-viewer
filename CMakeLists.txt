@@ -24,6 +24,7 @@ set(BENCHMARK_VIEWER_SOURCES
   src/timeline-view.cc
   src/timeline-overlay.cc
   src/graphics-node-item.cc
+  src/node-info-widget.cc
   )
 
 # header (moc)
@@ -34,6 +35,7 @@ set(BENCHMARK_VIEWER_QT_HEADER
   src/timeline-view.hh
   src/timeline-overlay.hh
   src/graphics-node-item.hh
+  src/node-info-widget.hh
   )
 
 # resources (rcs)

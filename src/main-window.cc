@@ -32,12 +32,14 @@
 #include <QDebug>
 #include <QStringList>
 #include <QSplitter>
+#include <QDockWidget>
 
 #include "preferences.hh"
 #include "parser.hh"
 #include "scene.hh"
 #include "timeline-view.hh"
 #include "timeline-overlay.hh"
+#include "node-info-widget.hh"
 #include "utils.hh"
 #include "config.hh"
 
@@ -216,9 +218,9 @@ void CMainWindow::open(const QString & filename)
   m_openPath = fi.absolutePath();
 
   showMessage(QString("Opening %1").arg(filename));
+  writeSettings(); // updates openPath
 
   CParser parser(filename);
-
   showMessage(QString("%1 contains %2 nodes").arg(filename).arg(QString::number(parser.nodes().size())));
 
   CScene *scene = new CScene(parser.nodes());
@@ -234,7 +236,17 @@ void CMainWindow::open(const QString & filename)
 
   m_mainWidget->addWidget(timelineView);
 
-  writeSettings(); // updates openPath
+  // Node info
+  CNodeInfo *nodeInfo = new CNodeInfo;
+  connect(timelineView, SIGNAL(currentNodeChanged(CNode*)),
+          nodeInfo, SLOT(setNode(CNode*)));
+
+  QDockWidget *dockNodeInfo = new QDockWidget;
+  dockNodeInfo->setWidget(nodeInfo);
+  dockNodeInfo->setMinimumWidth(300);
+  dockNodeInfo->setMaximumWidth(300);
+  dockNodeInfo->setFeatures(QDockWidget::NoDockWidgetFeatures);
+  addDockWidget(Qt::RightDockWidgetArea, dockNodeInfo);
 }
 
 void CMainWindow::open()
