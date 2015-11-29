@@ -27,7 +27,8 @@ m_steps(),
 m_label(),
 m_category(),
 m_level(0),
-m_duration(0)
+m_duration(0),
+m_parent(0)
 {
 }
 
@@ -104,6 +105,16 @@ int CNode::level() const
 void CNode::setLevel(const int p_level)
 {
   m_level = p_level;
+}
+
+CNode *CNode::parent() const
+{
+  return m_parent;
+}
+
+void CNode::setParent(CNode *p_parent)
+{
+  m_parent = p_parent;
 }
 
 bool CNode::isValid() const

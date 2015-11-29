@@ -48,6 +48,9 @@ void setCategory(const QString & p_category);
 int level() const;
 void setLevel(const int p_level);
 
+CNode *parent() const;
+void setParent(CNode *p_parent);
+
 bool isValid() const;
 
 qint64 duration() const;
@@ -64,6 +67,8 @@ private:
   QString m_category;
   int m_level;
   qint64 m_duration;
+
+  CNode *m_parent;
 };
 
 #endif // __NODE_HH__
