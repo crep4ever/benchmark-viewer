@@ -18,6 +18,7 @@
 #include "node.hh"
 
 #include <QDebug>
+#include "utils.hh"
 
 CNode::CNode() :
 m_start(),
@@ -110,30 +111,5 @@ QString CNode::toString() const
 {
   return QString("%1 (%2)")
   .arg(label())
-  .arg(mSecsToString(duration()));
-}
-
-QString CNode::mSecsToString(const qint64 p_msecs)
-{
-  const int ms = p_msecs;
-  const int h  = p_msecs / (60  * 60 * 1000);
-  const int mn = p_msecs / (60 * 1000) - h * 60;
-  const int s  = p_msecs / 1000 - mn * 60;
-
-  if (h > 1)
-  {
-    return QString("%1h %2mn").arg(h).arg(mn);
-  }
-  else if (mn > 1)
-  {
-    return QString("%1mn %2s").arg(mn).arg(s);
-  }
-  else if (s > 1)
-  {
-    return QString("%1s %2ms").arg(s).arg(ms);
-  }
-  else
-  {
-    return QString("%1ms").arg(ms);
-  }
+  .arg(::mSecsToString(duration()));
 }
