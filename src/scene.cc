@@ -29,17 +29,13 @@
 #include "graphics-node-item.hh"
 
 CScene::CScene(const QList<CNode*> & p_nodes) : QGraphicsScene()
+, m_nodes(p_nodes)
 {
   QElapsedTimer timer;
   timer.start();
 
-  qint64 origin = 0;
-  if (!p_nodes.empty())
-  {
-    origin = p_nodes[0]->start().toMSecsSinceEpoch();
-  }
-
-  foreach (CNode* node, p_nodes)
+  const qint64 origin = start().toMSecsSinceEpoch();
+  foreach (CNode* node, m_nodes)
   {
     const int w = (int) node->duration();
     const int h = 100;
@@ -91,4 +87,38 @@ void CScene::nodeRightClicked()
     //qDebug() << "right cliked" << item->node()->toString();
     emit currentItemChanged(item);
   }
+}
+
+
+QDateTime CScene::start() const
+{
+  if (m_nodes.empty())
+  {
+    return QDateTime();
+  }
+
+  return m_nodes[0]->start();
+}
+
+QDateTime CScene::stop() const
+{
+  if (m_nodes.empty())
+  {
+    return QDateTime();
+  }
+
+  QDateTime last = m_nodes[0]->stop();
+  foreach (CNode *node, m_nodes)
+  {
+    if (node->level() == 0 && node->stop() > last)
+    {
+      last = node->stop();
+    }
+  }
+  return last;
+}
+
+qint64 CScene::duration() const
+{
+  return stop().toMSecsSinceEpoch() - start().toMSecsSinceEpoch();
 }

@@ -19,6 +19,7 @@
 #define __SCENE_HH__
 
 #include <QGraphicsScene>
+#include <QDateTime>
 #include <QList>
 
 class CNode;
@@ -31,12 +32,19 @@ public:
   CScene(const QList<CNode*> & p_nodes);
   virtual ~CScene();
 
+  QDateTime start() const;
+  QDateTime stop() const;
+  qint64 duration() const;
+
 private slots:
 void nodeLeftClicked();
 void nodeRightClicked();
 
 signals:
 void currentItemChanged(QGraphicsItem *item);
+
+private:
+  QList<CNode*> m_nodes;
 
 };
 
