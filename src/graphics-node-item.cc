@@ -41,15 +41,3 @@ void CGraphicsNodeItem::setNode(CNode* p_node)
 {
   m_node = p_node;
 }
-
-void CGraphicsNodeItem::mousePressEvent(QGraphicsSceneMouseEvent * p_event)
-{
-  if (p_event->button() == Qt::LeftButton)
-  {
-    emit(leftClicked());
-  }
-  else if (p_event->button() == Qt::RightButton)
-  {
-    emit(rightClicked());
-  }
-}

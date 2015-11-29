@@ -21,8 +21,8 @@
 #include <QGraphicsRectItem>
 #include <QAction>
 #include <QWheelEvent>
+#include <QMouseEvent>
 #include <QElapsedTimer>
-#include <QMenu>
 #include <QGridLayout>
 #include <QDebug>
 
@@ -68,6 +68,16 @@ void CTimeLineView::createActions()
   connect(m_zoomOutAct, SIGNAL(triggered()), this, SLOT(zoomOut()));
 }
 
+void CTimeLineView::zoomIn()
+{
+  scale(1.2, 1.0);
+}
+
+void CTimeLineView::zoomOut()
+{
+  scale(1 / 1.2, 1.0);
+}
+
 void CTimeLineView::wheelEvent(QWheelEvent *p_event)
 {
   if (p_event->delta() > 0)
@@ -93,25 +103,14 @@ void CTimeLineView::wheelEvent(QWheelEvent *p_event)
   QGraphicsView::wheelEvent(p_event);
 }
 
-void CTimeLineView::zoomIn()
+void CTimeLineView::mousePressEvent(QMouseEvent *event)
 {
-  scale(1.2, 1.0);
-}
+  if (QGraphicsItem *item = itemAt(event->pos()))
+  {
+    m_currentSceneItem = item;
+  }
 
-void CTimeLineView::zoomOut()
-{
-  scale(1 / 1.2, 1.0);
-}
-
-void CTimeLineView::contextMenuEvent(QContextMenuEvent *event)
-{
-  QMenu *menu = new QMenu;
-
-  menu->addAction(m_zoomInAct);
-  menu->addAction(m_zoomOutAct);
-
-  menu->exec(event->globalPos());
-  delete menu;
+  QGraphicsView::mousePressEvent(event);
 }
 
 void CTimeLineView::updateLabelsVisibility()
@@ -131,11 +130,6 @@ void CTimeLineView::updateLabelsVisibility()
       t->setVisible(visibility);
     }
   }
-}
-
-void CTimeLineView::currentSceneItemChanged(QGraphicsItem *p_item)
-{
-  m_currentSceneItem = p_item;
 }
 
 CTimeLineOverlay* CTimeLineView::overlay() const

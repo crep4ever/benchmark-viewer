@@ -23,6 +23,7 @@
 
 class QAction;
 class QWheelEvent;
+class QMouseEvent;
 class CScene;
 class CTimeLineOverlay;
 
@@ -33,17 +34,16 @@ class CTimeLineView : public QGraphicsView
 public:
   CTimeLineView(CScene *p_scene);
   virtual ~CTimeLineView();
-  virtual void wheelEvent(QWheelEvent *event);
 
   CTimeLineOverlay *overlay() const;
 
 protected:
-  virtual void contextMenuEvent(QContextMenuEvent *event);
+  virtual void wheelEvent(QWheelEvent *event);
+  virtual void mousePressEvent(QMouseEvent *event);
 
 public slots:
 void zoomIn();
 void zoomOut();
-void currentSceneItemChanged(QGraphicsItem * p_item);
 
 private:
   // zoom actions

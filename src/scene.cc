@@ -63,9 +63,6 @@ CScene::CScene(const QList<CNode*> & p_nodes) : QGraphicsScene()
     label->setBrush(_TangoAluminium1);
     label->setFlags(QGraphicsItem::ItemIgnoresTransformations);
 
-    connect(item, SIGNAL(leftClicked()), this, SLOT(nodeLeftClicked()));
-    connect(item, SIGNAL(rightClicked()), this, SLOT(nodeRightClicked()));
-
     addItem(item);
   }
 
@@ -73,27 +70,6 @@ CScene::CScene(const QList<CNode*> & p_nodes) : QGraphicsScene()
 }
 
 CScene::~CScene(){}
-
-void CScene::nodeLeftClicked()
-{
-  CGraphicsNodeItem *item = qobject_cast<CGraphicsNodeItem*>(sender());
-  if (item)
-  {
-    //qDebug() << "left cliked" << item->node()->toString();
-    emit currentItemChanged(item);
-  }
-}
-
-void CScene::nodeRightClicked()
-{
-  CGraphicsNodeItem *item = qobject_cast<CGraphicsNodeItem*>(sender());
-  if (item)
-  {
-    //qDebug() << "right cliked" << item->node()->toString();
-    emit currentItemChanged(item);
-  }
-}
-
 
 QDateTime CScene::start() const
 {

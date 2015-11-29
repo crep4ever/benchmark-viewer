@@ -37,16 +37,8 @@ public:
   qint64 duration() const;
   int depth() const;
 
-private slots:
-void nodeLeftClicked();
-void nodeRightClicked();
-
-signals:
-void currentItemChanged(QGraphicsItem *item);
-
 private:
   QList<CNode*> m_nodes;
-
 };
 
 #endif // __SCENE_HH__

@@ -24,10 +24,8 @@ class QGraphicsSceneMouseEvent;
 
 
 class CNode;
-class CGraphicsNodeItem : public QObject, public QGraphicsRectItem
+class CGraphicsNodeItem : public QGraphicsRectItem
 {
-  Q_OBJECT
-
 public:
   CGraphicsNodeItem();
   virtual ~CGraphicsNodeItem();
@@ -35,17 +33,7 @@ public:
   CNode* node() const;
   void setNode(CNode* p_node);
 
-protected:
-  //virtual void mouseMoveEvent(QGraphicsSceneMouseEvent * event);
-  virtual void mousePressEvent(QGraphicsSceneMouseEvent * event);
-  //virtual void mouseReleaseEvent(QGraphicsSceneMouseEvent * event);
-
-signals:
-void leftClicked();
-void rightClicked();
-
 private:
-
   CNode *m_node;
 };
 

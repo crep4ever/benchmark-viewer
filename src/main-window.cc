@@ -232,9 +232,6 @@ void CMainWindow::open(const QString & filename)
   CTimeLineView *timelineView = new CTimeLineView(scene);
   timelineView->overlay()->setText(sessionInfo);
 
-  connect(scene, SIGNAL(currentItemChanged(QGraphicsItem*)),
-          timelineView, SLOT(currentSceneItemChanged(QGraphicsItem*)));
-
   m_mainWidget->addWidget(timelineView);
 
   writeSettings(); // updates openPath
