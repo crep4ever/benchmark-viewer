@@ -22,6 +22,7 @@ set(BENCHMARK_VIEWER_SOURCES
   src/node.cc
   src/scene.cc
   src/timeline-view.cc
+  src/timeline-overlay.cc
   src/graphics-node-item.cc
   )
 
@@ -31,6 +32,7 @@ set(BENCHMARK_VIEWER_QT_HEADER
   src/preferences.hh
   src/scene.hh
   src/timeline-view.hh
+  src/timeline-overlay.hh
   src/graphics-node-item.hh
   )
 

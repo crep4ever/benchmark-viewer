@@ -37,6 +37,8 @@
 #include "parser.hh"
 #include "scene.hh"
 #include "timeline-view.hh"
+#include "timeline-overlay.hh"
+#include "utils.hh"
 #include "config.hh"
 
 CMainWindow::CMainWindow(QWidget *parent)
@@ -221,7 +223,15 @@ void CMainWindow::open(const QString & filename)
 
   CScene *scene = new CScene(parser.nodes());
 
+  QString sessionInfo = QString("%1\n%2\n%3 (%4 actions)")
+    .arg(QFileInfo(filename).absoluteFilePath())
+    .arg(scene->start().date().toString(Qt::SystemLocaleLongDate))
+    .arg(::mSecsToString(scene->duration()))
+    .arg(parser.nodes().size());
+
   CTimeLineView *timelineView = new CTimeLineView(scene);
+  timelineView->overlay()->setText(sessionInfo);
+
   connect(scene, SIGNAL(currentItemChanged(QGraphicsItem*)),
           timelineView, SLOT(currentSceneItemChanged(QGraphicsItem*)));
 

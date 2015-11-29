@@ -26,13 +26,15 @@
 #include <QGridLayout>
 #include <QDebug>
 
-#include "graphics-node-item.hh"
 #include "scene.hh"
+#include "timeline-overlay.hh"
+
 
 CTimeLineView::CTimeLineView(CScene *p_scene) : QGraphicsView()
 , m_zoomInAct(0)
 , m_zoomOutAct(0)
 , m_currentSceneItem(0)
+, m_overlay(new CTimeLineOverlay(this))
 {
   QElapsedTimer timer;
   timer.start();
@@ -134,4 +136,9 @@ void CTimeLineView::updateLabelsVisibility()
 void CTimeLineView::currentSceneItemChanged(QGraphicsItem *p_item)
 {
   m_currentSceneItem = p_item;
+}
+
+CTimeLineOverlay* CTimeLineView::overlay() const
+{
+    return m_overlay;
 }

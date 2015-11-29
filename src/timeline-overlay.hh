@@ -1,6 +1,6 @@
 // Copyright (C) 2015, Romain Goffe <romain.goffe@gmail.com>
-// This program is free software; you can redistribute it and/or
 //
+// This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU General Public License as
 // published by the Free Software Foundation; either version 2 of the
 // License, or (at your option) any later version.
@@ -15,49 +15,37 @@
 // Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
 // 02110-1301, USA.
 //******************************************************************************
-#ifndef __TIMELINE_VIEW_HH__
-#define __TIMELINE_VIEW_HH__
 
-#include <QGraphicsView>
-#include <QList>
+#ifndef __TIMELINE_OVERLAY_HH__
+#define __TIMELINE_OVERLAY_HH__
 
-class QAction;
-class QWheelEvent;
-class CScene;
-class CTimeLineOverlay;
+#include <QWidget>
+#include <QColor>
+#include <QSize>
 
-class CTimeLineView : public QGraphicsView
+class QLabel;
+class QPaintEvent;
+
+class CTimeLineOverlay : public QWidget
 {
   Q_OBJECT
 
 public:
-  CTimeLineView(CScene *p_scene);
-  virtual ~CTimeLineView();
-  virtual void wheelEvent(QWheelEvent *event);
+  /// Constructor.
+  CTimeLineOverlay(QWidget *parent = 0);
 
-  CTimeLineOverlay *overlay() const;
+  /// Destructor.
+  virtual ~CTimeLineOverlay();
 
 protected:
-  virtual void contextMenuEvent(QContextMenuEvent *event);
+  virtual QSize sizeHint() const;
+  void paintEvent(QPaintEvent* event);
 
 public slots:
-void zoomIn();
-void zoomOut();
-void currentSceneItemChanged(QGraphicsItem * p_item);
+  void setText(const QString & p_msg);
 
 private:
-  // zoom actions
-  void createActions();
-
-  // hide labels if they don't fit in rect
-  void updateLabelsVisibility();
-
-private:
-  QAction *m_zoomInAct;
-  QAction *m_zoomOutAct;
-
-  QGraphicsItem *m_currentSceneItem;
-  CTimeLineOverlay *m_overlay;
+  QLabel *m_sessionInfoLabel;
 };
 
-#endif // __TIMELINE_VIEW_HH__
+#endif  // __TIMELINE_OVERLAY_HH__
