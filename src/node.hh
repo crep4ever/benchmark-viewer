@@ -63,6 +63,7 @@ private:
   QString m_label;
   QString m_category;
   int m_level;
+  qint64 m_duration;
 };
 
 #endif // __NODE_HH__

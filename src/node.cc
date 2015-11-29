@@ -26,7 +26,8 @@ m_stop(),
 m_steps(),
 m_label(),
 m_category(),
-m_level(0)
+m_level(0),
+m_duration(0)
 {
 }
 
@@ -40,6 +41,10 @@ const QDateTime & CNode::start() const
 void CNode::setStart(const QDateTime & p_dateTime)
 {
   m_start = p_dateTime;
+  if (isValid())
+  {
+    m_duration = m_stop.toMSecsSinceEpoch() - m_start.toMSecsSinceEpoch();
+  }
 }
 
 const QDateTime & CNode::stop() const
@@ -50,6 +55,10 @@ const QDateTime & CNode::stop() const
 void CNode::setStop(const QDateTime & p_dateTime)
 {
   m_stop = p_dateTime;
+  if (isValid())
+  {
+    m_duration = m_stop.toMSecsSinceEpoch() - m_start.toMSecsSinceEpoch();
+  }
 }
 
 const QList<QDateTime> & CNode::steps() const
@@ -104,7 +113,7 @@ bool CNode::isValid() const
 
 qint64 CNode::duration() const
 {
-  return m_stop.toMSecsSinceEpoch() - m_start.toMSecsSinceEpoch();
+  return m_duration;
 }
 
 QString CNode::toString() const
