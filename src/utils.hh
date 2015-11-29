@@ -26,22 +26,22 @@ namespace
 
   inline QString mSecsToString(const qint64 p_msecs)
   {
-    const int ms = p_msecs;
     const int h  = p_msecs / (60  * 60 * 1000);
     const int mn = p_msecs / (60 * 1000) - h * 60;
-    const int s  = p_msecs / 1000 - mn * 60;
+    const int s  = p_msecs / 1000 - h * 60 * 60 - mn * 60;
+    const int ms = p_msecs - h * 60 * 60 * 1000 - mn * 60 * 1000 - s * 1000;
 
-    if (h > 1)
+    if (h > 0)
     {
       return QString("%1h %2mn").arg(h).arg(mn);
     }
-    else if (mn > 1)
+    else if (mn > 0)
     {
       return QString("%1mn %2s").arg(mn).arg(s);
     }
-    else if (s > 1)
+    else if (s > 0)
     {
-      return QString("%1s %2ms").arg(s).arg(ms);
+      return QString("%1.%2s").arg(s).arg(ms);
     }
     else
     {
