@@ -22,6 +22,7 @@
 #include <QAction>
 #include <QElapsedTimer>
 #include <QCryptographicHash>
+#include <QtGlobal>
 #include <QDebug>
 
 #include "tango-colors.hh"
@@ -37,15 +38,15 @@ CScene::CScene(const QList<CNode*> & p_nodes) : QGraphicsScene()
   const int h = 10;
   const int margin = 2;
 
-  const qint64 origin = start().toMSecsSinceEpoch();
-  const qint64 end    = stop().toMSecsSinceEpoch();
+  const qint64 origin = first().toMSecsSinceEpoch();
+  const qint64 end    = last().toMSecsSinceEpoch();
 
   setSceneRect(0, 0, end - origin, depth() * (h + margin) + h);
 
   foreach (CNode* node, m_nodes)
   {
     const int w = node->duration();
-    const int x = node->start().toMSecsSinceEpoch() - origin;
+    const int x = node->startMs() - origin;
     const int y = node->level() * (margin + h);
 
     CGraphicsNodeItem *item = new CGraphicsNodeItem();
@@ -71,7 +72,7 @@ CScene::CScene(const QList<CNode*> & p_nodes) : QGraphicsScene()
 
 CScene::~CScene(){}
 
-QDateTime CScene::start() const
+QDateTime CScene::first() const
 {
   if (m_nodes.empty())
   {
@@ -90,7 +91,7 @@ QDateTime CScene::start() const
   return first;
 }
 
-QDateTime CScene::stop() const
+QDateTime CScene::last() const
 {
   if (m_nodes.empty())
   {
@@ -110,7 +111,7 @@ QDateTime CScene::stop() const
 
 qint64 CScene::duration() const
 {
-  return stop().toMSecsSinceEpoch() - start().toMSecsSinceEpoch();
+  return last().toMSecsSinceEpoch() - first().toMSecsSinceEpoch();
 }
 
 int CScene::depth() const
@@ -118,10 +119,7 @@ int CScene::depth() const
   int depth = 0;
   foreach (CNode *node, m_nodes)
   {
-    if (node->level() > depth)
-    {
-      depth = node->level();
-    }
+    depth = qMax(node->level(), depth);
   }
   return depth;
 }

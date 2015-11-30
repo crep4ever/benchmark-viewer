@@ -32,8 +32,8 @@ public:
   CScene(const QList<CNode*> & p_nodes);
   virtual ~CScene();
 
-  QDateTime start() const;
-  QDateTime stop() const;
+  QDateTime first() const;
+  QDateTime last() const;
   qint64 duration() const;
   int depth() const;
 
