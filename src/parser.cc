@@ -22,6 +22,7 @@
 #include <QElapsedTimer>
 #include <QStringList>
 #include <QDateTime>
+#include <QtGlobal>
 #include <QDebug>
 
 #include "node.hh"
@@ -113,10 +114,6 @@ bool CParser::parse(const QString & p_fileName)
     {
       node->addStep(QDateTime::fromString(date, dateFormat));
     }
-    else
-    {
-      qDebug() << "invalid action type: " << type;
-    }
 
     if (node->isValid() && node->duration() > 1) // skip nodes under 1ms
     {
@@ -129,5 +126,48 @@ bool CParser::parse(const QString & p_fileName)
   qDebug() << "File" << p_fileName << "processed in" << timer.elapsed() << "ms";
   qDebug() << "Nodes: valid" << m_nodes.size() << "; invalid" << incompleteNodes.size();
 
+  computeTreeModel();
+
   return true;
+}
+
+void CParser::computeTreeModel()
+{
+  QElapsedTimer timer;
+  timer.start();
+
+  int depth = 0;
+  foreach(CNode *node, m_nodes)
+  {
+    depth = qMax(node->level(), depth);
+  }
+
+  foreach(CNode *node, m_nodes)
+  {
+    if (node->level() == depth)
+    {
+      continue;
+    }
+
+    const qint64 start = node->startMs();
+    const qint64 stop  = node->stopMs();
+
+    foreach(CNode *candidate, m_nodes)
+    {
+      if (candidate->level() != node->level() + 1)
+      {
+        continue;
+      }
+
+      const qint64 candidateStart = candidate->startMs();
+      const qint64 candidateStop  = candidate->stopMs();
+
+      if (candidateStart >= start && candidateStop <= stop)
+      {
+        node->addChild(candidate);
+      }
+    }
+  }
+
+  qDebug() << "Compute tree model in" << timer.elapsed() << "ms";
 }
