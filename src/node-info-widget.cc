@@ -19,29 +19,26 @@
 
 #include <QBoxLayout>
 #include <QLabel>
+#include <QPainter>
 #include <QDebug>
 
 #include "node.hh"
 #include "utils.hh"
 
-CNodeInfo::CNodeInfo(QWidget *p_parent)
-  : QWidget(p_parent)
-  , m_firstNode(0)
-  , m_secondNode(0)
-  , m_firstLabel(new QLabel)
-  , m_secondLabel(new QLabel)
-  , m_diffLabel(new QLabel)
-  , m_layout(new QVBoxLayout)
+CNodeInfo::CNodeInfo(QWidget *p_parent) : COverlayWidget(p_parent)
+  , m_node(0)
+  , m_displayChildrenInfo(false)
 {
-  m_layout->addWidget(m_firstLabel);
-  m_layout->addWidget(m_secondLabel);
-  m_layout->addWidget(m_diffLabel);
-  m_layout->addStretch();
-  setLayout(m_layout);
+  resize(sizeHint());
 }
 
 CNodeInfo::~CNodeInfo()
 {
+}
+
+QSize CNodeInfo::sizeHint() const
+{
+  return QSize(250, 80);
 }
 
 void CNodeInfo::setNode(CNode *p_node)
@@ -52,88 +49,89 @@ void CNodeInfo::setNode(CNode *p_node)
     return;
   }
 
-  if (m_firstNode && (p_node == m_firstNode || p_node == m_secondNode))
-  {
-    return;
-  }
-
-  if (!m_firstNode && !m_secondNode)
-  {
-    m_firstNode = p_node;
-    updateInfo(m_firstNode, m_firstLabel);
-  }
-  else if (m_firstNode && !m_secondNode)
-  {
-    m_secondNode = p_node;
-    updateInfo(m_secondNode, m_secondLabel);
-  }
-  else if (m_firstNode && m_secondNode)
-  {
-    m_firstNode = m_secondNode;
-    updateInfo(m_firstNode, m_firstLabel);
-
-    m_secondNode = p_node;
-    updateInfo(m_secondNode, m_secondLabel);
-  }
-
-  if (m_firstNode && m_secondNode)
-  {
-    updateDiffInfo();
-  }
+  m_node = p_node;
+  updateInfo();
 }
 
-void CNodeInfo::updateInfo(CNode *p_node, QLabel *p_label)
+void CNodeInfo::updateInfo()
 {
-  QString info = QString("<b>%1</b><br />").arg(p_node->label());
+  Q_ASSERT(m_node);
 
-  if (p_node->parent())
-  {
-    info += QString("<b>Parent:</b> %1<br />").arg(p_node->parent()->label());
-  }
+  QString info = QString("<div style=\"float: left; border: 8px solid red\"></div><b>%1</b><br />").arg(m_node->label());
 
   info += QString("%1 -> %2 (%3)\n\n")
-      .arg(p_node->start().time().toString())
-      .arg(p_node->stop().time().toString())
-      .arg(::mSecsToString(p_node->duration()));
+      .arg(m_node->start().time().toString())
+      .arg(m_node->stop().time().toString())
+      .arg(::mSecsToString(m_node->duration()));
 
-  p_label->setText(info);
-}
-
-void CNodeInfo::updateDiffInfo()
-{
-  Q_ASSERT(m_firstNode && m_secondNode);
-  if (m_firstNode->level() != m_secondNode->level())
+  if (m_displayChildrenInfo)
   {
-    return;
+    info += QString("<hr>");
+
+    QHash<QString, int> counter;
+    foreach (CNode* child, m_node->children())
+    {
+      ++counter[child->label()];
+    }
+
+    QHash<QString, int>::const_iterator it = counter.constBegin();
+    while (it != counter.constEnd())
+    {
+      const QString childLabel = it.key();
+      const int childCount = it.value();
+
+      info += QString("%1 (x %2)").arg(childLabel).arg(childCount);
+      info += QString("<br />");
+      ++it;
+    }
   }
 
-  const qint64 firstNodeStart =  m_firstNode->start().toMSecsSinceEpoch();
-  const qint64 firstNodeStop  =  m_firstNode->stop().toMSecsSinceEpoch();
-
-  const qint64 secondNodeStart = m_secondNode->start().toMSecsSinceEpoch();
-  const qint64 secondNodeStop  = m_secondNode->stop().toMSecsSinceEpoch();
-
-  qint64 gap = 0;
-  if (secondNodeStart > firstNodeStop)
-  {
-    gap = secondNodeStart - firstNodeStop;
-  }
-  else
-  {
-    gap = firstNodeStart - secondNodeStop;
-  }
-
-  QString info = QString("<b>Gap:</b> %1<br />")
-    .arg(::mSecsToString(gap));
-
-  m_diffLabel->setText(info);
+  setText(info);
 }
 
 void CNodeInfo::clearInfo()
 {
-  m_firstLabel->setText("");
-  m_secondLabel->setText("");
-  m_diffLabel->setText("");
-  m_firstNode = 0;
-  m_secondNode = 0;
+  setText("");
+  m_node = 0;
+}
+
+
+// void CNodeInfo::updateDiffInfo()
+// {
+//   Q_ASSERT(m_firstNode && m_secondNode);
+//   if (m_firstNode->level() != m_secondNode->level())
+//   {
+//     return;
+//   }
+//
+//   const qint64 firstNodeStart =  m_firstNode->startMs();
+//   const qint64 firstNodeStop  =  m_firstNode->stopMs();
+//
+//   const qint64 secondNodeStart = m_secondNode->startMs();
+//   const qint64 secondNodeStop  = m_secondNode->stopMs();
+//
+//   qint64 gap = 0;
+//   if (secondNodeStart > firstNodeStop)
+//   {
+//     gap = secondNodeStart - firstNodeStop;
+//   }
+//   else
+//   {
+//     gap = firstNodeStart - secondNodeStop;
+//   }
+//
+//   QString info = QString("<b>Gap:</b> %1<br />")
+//     .arg(::mSecsToString(gap));
+//
+//   m_diffLabel->setText(info);
+// }
+
+bool CNodeInfo::displayChildrenInfo() const
+{
+  return m_displayChildrenInfo;
+}
+
+void CNodeInfo::setDisplayChildrenInfo(const bool p_value)
+{
+  m_displayChildrenInfo = p_value;
 }

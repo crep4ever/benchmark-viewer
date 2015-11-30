@@ -19,38 +19,40 @@
 #ifndef __NODE_INFO_WIDGET_HH__
 #define __NODE_INFO_WIDGET_HH__
 
-#include <QWidget>
+#include "overlay-widget.hh"
+#include <QSize>
 
-class QBoxLayout;
-class QLabel;
 class CNode;
 
-class CNodeInfo : public QWidget
+class CNodeInfo : public COverlayWidget
 {
   Q_OBJECT
 
 public:
   /// Constructor.
-  CNodeInfo(QWidget *parent = 0);
+  CNodeInfo(QWidget *p_parent = 0);
 
   /// Destructor.
   virtual ~CNodeInfo();
+
+  CNode *node() const;
+
+  bool displayChildrenInfo() const;
+  void setDisplayChildrenInfo(const bool p_value);
+
+protected:
+  virtual QSize sizeHint() const;
 
 public slots:
   void setNode(CNode *p_node);
 
 private:
   void clearInfo();
-  void updateInfo(CNode *p_node, QLabel *p_label);
-  void updateDiffInfo();
+  void updateInfo();
 
 private:
-  CNode *m_firstNode;
-  CNode *m_secondNode;
-  QLabel *m_firstLabel;
-  QLabel *m_secondLabel;
-  QLabel *m_diffLabel;
-  QBoxLayout *m_layout;
+  CNode *m_node;
+  bool m_displayChildrenInfo;
 };
 
 #endif  // __NODE_INFO_WIDGET_HH__
