@@ -24,9 +24,11 @@
 class QAction;
 class QWheelEvent;
 class QMouseEvent;
+class QResizeEvent;
 class CScene;
-class CTimeLineOverlay;
+class COverlayWidget;
 class CNode;
+class CNodeInfo;
 
 class CTimeLineView : public QGraphicsView
 {
@@ -36,11 +38,12 @@ public:
   CTimeLineView(CScene *p_scene);
   virtual ~CTimeLineView();
 
-  CTimeLineOverlay *overlay() const;
+  COverlayWidget *sessionInfo() const;
 
 protected:
-  virtual void wheelEvent(QWheelEvent *event);
-  virtual void mousePressEvent(QMouseEvent *event);
+  virtual void wheelEvent(QWheelEvent *p_event);
+  virtual void mousePressEvent(QMouseEvent *p_event);
+  virtual void resizeEvent(QResizeEvent *p_event);
 
 public slots:
 void zoomIn();
@@ -56,12 +59,17 @@ private:
   // hide labels if they don't fit in rect
   void updateLabelsVisibility();
 
+  // reposition overlays
+  void updateOverlaysPositions();
+
 private:
   QAction *m_zoomInAct;
   QAction *m_zoomOutAct;
 
   QGraphicsItem *m_currentSceneItem;
-  CTimeLineOverlay *m_overlay;
+  COverlayWidget *m_sessionInfo;
+  CNodeInfo *m_firstSelection;
+  CNodeInfo *m_secondSelection;
 };
 
 #endif // __TIMELINE_VIEW_HH__

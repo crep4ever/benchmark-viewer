@@ -23,19 +23,22 @@
 #include <QWheelEvent>
 #include <QMouseEvent>
 #include <QElapsedTimer>
-#include <QGridLayout>
+#include <QApplication>
 #include <QDebug>
 
 #include "scene.hh"
 #include "node.hh"
 #include "graphics-node-item.hh"
-#include "timeline-overlay.hh"
+#include "overlay-widget.hh"
+#include "node-info-widget.hh"
 
 CTimeLineView::CTimeLineView(CScene *p_scene) : QGraphicsView()
 , m_zoomInAct(0)
 , m_zoomOutAct(0)
 , m_currentSceneItem(0)
-, m_overlay(new CTimeLineOverlay(this))
+, m_sessionInfo(new COverlayWidget(this))
+, m_firstSelection(new CNodeInfo(this))
+, m_secondSelection(new CNodeInfo(this))
 {
   QElapsedTimer timer;
   timer.start();
@@ -104,9 +107,9 @@ void CTimeLineView::wheelEvent(QWheelEvent *p_event)
   QGraphicsView::wheelEvent(p_event);
 }
 
-void CTimeLineView::mousePressEvent(QMouseEvent *event)
+void CTimeLineView::mousePressEvent(QMouseEvent *p_event)
 {
-  if (QGraphicsItem *item = itemAt(event->pos()))
+  if (QGraphicsItem *item = itemAt(p_event->pos()))
   {
     // restore style of previous item
     CGraphicsNodeItem *previous = dynamic_cast<CGraphicsNodeItem*>(m_currentSceneItem);
@@ -121,7 +124,17 @@ void CTimeLineView::mousePressEvent(QMouseEvent *event)
     if (nodeItem)
     {
       nodeItem->setOpacity(0.8);
-      emit(currentNodeChanged(nodeItem->node()));
+      if (Qt::ControlModifier == QApplication::keyboardModifiers())
+      {
+        m_secondSelection->setNode(nodeItem->node());
+        m_secondSelection->setVisible(true);
+      }
+      else
+      {
+        m_firstSelection->setNode(nodeItem->node());
+        emit currentNodeChanged(nodeItem->node());
+        m_firstSelection->setVisible(true);
+      }
     }
   }
   else
@@ -132,11 +145,22 @@ void CTimeLineView::mousePressEvent(QMouseEvent *event)
     {
       previous->setOpacity(1.0);
     }
+
     m_currentSceneItem = 0;
-    emit(currentNodeChanged(0));
+    m_firstSelection->setNode(0);
+    m_secondSelection->setNode(0);
+    m_firstSelection->setVisible(false);
+    m_secondSelection->setVisible(false);
   }
 
-  QGraphicsView::mousePressEvent(event);
+  QGraphicsView::mousePressEvent(p_event);
+}
+
+void CTimeLineView::resizeEvent(QResizeEvent *p_event)
+{
+  updateOverlaysPositions();
+
+  QGraphicsView::resizeEvent(p_event);
 }
 
 void CTimeLineView::updateLabelsVisibility()
@@ -158,7 +182,18 @@ void CTimeLineView::updateLabelsVisibility()
   }
 }
 
-CTimeLineOverlay* CTimeLineView::overlay() const
+COverlayWidget* CTimeLineView::sessionInfo() const
 {
-    return m_overlay;
+    return m_sessionInfo;
+}
+
+void CTimeLineView::updateOverlaysPositions()
+{
+  int x = 0;
+  int y = geometry().height() - m_firstSelection->geometry().height() - 10;
+  m_firstSelection->move(x, y);
+
+  x = geometry().width()  - m_secondSelection->geometry().width();
+  y = geometry().height() - m_secondSelection->geometry().height() - 10;
+  m_secondSelection->move(x, y);
 }
