@@ -38,7 +38,7 @@
 #include "parser.hh"
 #include "scene.hh"
 #include "timeline-view.hh"
-#include "timeline-overlay.hh"
+#include "overlay-widget.hh"
 #include "node-info-widget.hh"
 #include "utils.hh"
 #include "config.hh"
@@ -53,6 +53,8 @@ CMainWindow::CMainWindow(QWidget *parent)
 , m_aboutAct(0)
 , m_exitAct(0)
 , m_openAct(0)
+, m_timeLineViewAct(0)
+, m_treeViewAct(0)
 , m_openPath(QDir::homePath())
 {
   setWindowTitle("Benchmark viewer");
@@ -138,6 +140,20 @@ void CMainWindow::createActions()
   m_preferencesAct->setStatusTip(tr("Configure the application"));
   m_preferencesAct->setMenuRole(QAction::PreferencesRole);
   connect(m_preferencesAct, SIGNAL(triggered()), SLOT(preferences()));
+
+  m_timeLineViewAct = new QAction(tr("&Timeline"), this);
+  m_timeLineViewAct->setIcon(QIcon(":/icons/benchmark-viewer/48x48/timeline.png"));
+  m_timeLineViewAct->setStatusTip(tr("Display the session timeline"));
+  m_timeLineViewAct->setCheckable(true);
+  m_timeLineViewAct->setChecked(true);
+  connect(m_timeLineViewAct, SIGNAL(toggled(bool)), SLOT(toggleTimeLineView(bool)));
+
+  m_treeViewAct = new QAction(tr("&Call graph"), this);
+  m_treeViewAct->setIcon(QIcon(":/icons/benchmark-viewer/48x48/callgraph.png"));
+  m_treeViewAct->setStatusTip(tr("Display call graph of current action"));
+  m_treeViewAct->setCheckable(true);
+  m_treeViewAct->setChecked(false);
+  connect(m_treeViewAct, SIGNAL(toggled(bool)), SLOT(toggleTreeView(bool)));
 }
 
 
@@ -171,6 +187,9 @@ void CMainWindow::createToolBar()
   m_mainToolBar->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
   m_mainToolBar->addAction(m_openAct);
   m_mainToolBar->addSeparator();
+  m_mainToolBar->addAction(m_timeLineViewAct);
+  m_mainToolBar->addAction(m_treeViewAct);
+
   addToolBar(m_mainToolBar);
   setUnifiedTitleAndToolBarOnMac(true);
 }
@@ -212,6 +231,22 @@ void CMainWindow::about()
   .arg(QT_VERSION_STR));
 }
 
+void CMainWindow::toggleTimeLineView(bool p_visible)
+{
+  if (m_mainWidget && m_mainWidget->widget(0))
+  {
+    m_mainWidget->widget(0)->setVisible(p_visible);
+  }
+}
+
+void CMainWindow::toggleTreeView(bool p_visible)
+{
+  if (m_mainWidget && m_mainWidget->widget(1))
+  {
+    m_mainWidget->widget(1)->setVisible(p_visible);
+  }
+}
+
 void CMainWindow::open(const QString & filename)
 {
   QFileInfo fi(filename);
@@ -227,26 +262,22 @@ void CMainWindow::open(const QString & filename)
 
   QString sessionInfo = QString("%1\n%2\n%3 (%4 actions)")
     .arg(QFileInfo(filename).absoluteFilePath())
-    .arg(scene->start().date().toString(Qt::SystemLocaleLongDate))
+    .arg(scene->first().date().toString(Qt::SystemLocaleLongDate))
     .arg(::mSecsToString(scene->duration()))
     .arg(parser.nodes().size());
 
   CTimeLineView *timelineView = new CTimeLineView(scene);
-  timelineView->overlay()->setText(sessionInfo);
-
+  timelineView->sessionInfo()->setText(sessionInfo);
+  timelineView->setVisible(m_timeLineViewAct->isChecked());
   m_mainWidget->addWidget(timelineView);
 
-  // Node info
-  CNodeInfo *nodeInfo = new CNodeInfo;
+  // Call graph
+  CNodeInfo *treeView = new CNodeInfo;
+  treeView->setDisplayChildrenInfo(true);
   connect(timelineView, SIGNAL(currentNodeChanged(CNode*)),
-          nodeInfo, SLOT(setNode(CNode*)));
-
-  QDockWidget *dockNodeInfo = new QDockWidget;
-  dockNodeInfo->setWidget(nodeInfo);
-  dockNodeInfo->setMinimumWidth(300);
-  dockNodeInfo->setMaximumWidth(300);
-  dockNodeInfo->setFeatures(QDockWidget::NoDockWidgetFeatures);
-  addDockWidget(Qt::RightDockWidgetArea, dockNodeInfo);
+          treeView, SLOT(setNode(CNode*)));
+  treeView->setVisible(m_treeViewAct->isChecked());
+  m_mainWidget->addWidget(treeView);
 }
 
 void CMainWindow::open()

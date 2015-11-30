@@ -57,6 +57,8 @@ protected:
 
 private slots:
   void open();
+  void toggleTimeLineView(bool);
+  void toggleTreeView(bool);
 
   //application
   void preferences();
@@ -84,6 +86,8 @@ private:
   QAction *m_exitAct;
 
   QAction *m_openAct;
+  QAction *m_timeLineViewAct;
+  QAction *m_treeViewAct;
 
   // Settings
   QString m_openPath;
