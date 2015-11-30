@@ -22,13 +22,16 @@
 
 CNode::CNode() :
 m_start(),
+m_startMs(0),
 m_stop(),
+m_stopMs(0),
 m_steps(),
 m_label(),
 m_category(),
 m_level(0),
 m_duration(0),
-m_parent(0)
+m_parent(0),
+m_children()
 {
 }
 
@@ -42,10 +45,16 @@ const QDateTime & CNode::start() const
 void CNode::setStart(const QDateTime & p_dateTime)
 {
   m_start = p_dateTime;
+  m_startMs = p_dateTime.toMSecsSinceEpoch();
   if (isValid())
   {
-    m_duration = m_stop.toMSecsSinceEpoch() - m_start.toMSecsSinceEpoch();
+    m_duration = m_stopMs - m_startMs;
   }
+}
+
+qint64 CNode::startMs() const
+{
+  return m_startMs;
 }
 
 const QDateTime & CNode::stop() const
@@ -56,11 +65,18 @@ const QDateTime & CNode::stop() const
 void CNode::setStop(const QDateTime & p_dateTime)
 {
   m_stop = p_dateTime;
+  m_stopMs = p_dateTime.toMSecsSinceEpoch();
   if (isValid())
   {
-    m_duration = m_stop.toMSecsSinceEpoch() - m_start.toMSecsSinceEpoch();
+    m_duration = m_stopMs - m_startMs;
   }
 }
+
+qint64 CNode::stopMs() const
+{
+  return m_stopMs;
+}
+
 
 const QList<QDateTime> & CNode::steps() const
 {
@@ -115,6 +131,17 @@ CNode *CNode::parent() const
 void CNode::setParent(CNode *p_parent)
 {
   m_parent = p_parent;
+}
+
+const QList<CNode *> & CNode::children() const
+{
+  return m_children;
+}
+
+void CNode::addChild(CNode *p_node)
+{
+  p_node->setParent(this);
+  m_children << p_node;
 }
 
 bool CNode::isValid() const

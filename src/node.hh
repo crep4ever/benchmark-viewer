@@ -30,9 +30,11 @@ public:
 
 const QDateTime & start() const;
 void setStart(const QDateTime & p_dateTime);
+qint64 startMs() const;
 
 const QDateTime & stop() const;
 void setStop(const QDateTime & p_dateTime);
+qint64 stopMs() const;
 
 const QList<QDateTime> & steps() const;
 void setSteps(const QList<QDateTime> & p_steps);
@@ -51,6 +53,9 @@ void setLevel(const int p_level);
 CNode *parent() const;
 void setParent(CNode *p_parent);
 
+void addChild(CNode *p_node);
+const QList<CNode *> & children() const;
+
 bool isValid() const;
 
 qint64 duration() const;
@@ -60,7 +65,9 @@ QString toString() const;
 private:
 
   QDateTime m_start;
+  qint64 m_startMs;
   QDateTime m_stop;
+  qint64 m_stopMs;
   QList<QDateTime> m_steps;
 
   QString m_label;
@@ -69,6 +76,7 @@ private:
   qint64 m_duration;
 
   CNode *m_parent;
+  QList<CNode *> m_children;
 };
 
 #endif // __NODE_HH__
