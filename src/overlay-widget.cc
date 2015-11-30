@@ -15,7 +15,7 @@
 // Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
 // 02110-1301, USA.
 //******************************************************************************
-#include "timeline-overlay.hh"
+#include "overlay-widget.hh"
 
 #include <QBoxLayout>
 #include <QLabel>
@@ -23,31 +23,33 @@
 #include <QGraphicsView>
 #include <QPainter>
 
-CTimeLineOverlay::CTimeLineOverlay(QWidget *p_parent)
-  : QWidget(p_parent)
-  , m_sessionInfoLabel(new QLabel)
+COverlayWidget::COverlayWidget(QWidget *p_parent) : QWidget(p_parent)
+  , m_label(new QLabel)
 {
   setStyleSheet("background: transparent;");
   setAttribute(Qt::WA_TranslucentBackground);
   setWindowFlags(Qt::FramelessWindowHint);
 
-  QVBoxLayout *layout = new QVBoxLayout;
-  layout->addWidget(m_sessionInfoLabel);
-  setLayout(layout);
+  m_label->setTextInteractionFlags(Qt::TextSelectableByMouse);
+
+  QVBoxLayout *mainLayout = new QVBoxLayout;
+  mainLayout->addWidget(m_label);
+  mainLayout->addStretch();
+  setLayout(mainLayout);
 
   resize(sizeHint());
 }
 
-CTimeLineOverlay::~CTimeLineOverlay()
+COverlayWidget::~COverlayWidget()
 {
 }
 
-QSize CTimeLineOverlay::sizeHint() const
+QSize COverlayWidget::sizeHint() const
 {
   return QSize(600, 80);
 }
 
-void CTimeLineOverlay::paintEvent(QPaintEvent* /*event*/)
+void COverlayWidget::paintEvent(QPaintEvent* /*event*/)
 {
   QColor backgroundColor = palette().dark().color();
   backgroundColor.setAlpha(150);
@@ -55,7 +57,7 @@ void CTimeLineOverlay::paintEvent(QPaintEvent* /*event*/)
   customPainter.fillRect(rect(), backgroundColor);
 }
 
-void CTimeLineOverlay::setText(const QString & p_sessionInfo)
+void COverlayWidget::setText(const QString & p_text)
 {
-  m_sessionInfoLabel->setText(p_sessionInfo);
+  m_label->setText(p_text);
 }

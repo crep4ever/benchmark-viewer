@@ -16,8 +16,8 @@
 // 02110-1301, USA.
 //******************************************************************************
 
-#ifndef __TIMELINE_OVERLAY_HH__
-#define __TIMELINE_OVERLAY_HH__
+#ifndef __OVERLAY_WIDGET_HH__
+#define __OVERLAY_WIDGET_HH__
 
 #include <QWidget>
 #include <QColor>
@@ -26,16 +26,16 @@
 class QLabel;
 class QPaintEvent;
 
-class CTimeLineOverlay : public QWidget
+class COverlayWidget : public QWidget
 {
   Q_OBJECT
 
 public:
   /// Constructor.
-  CTimeLineOverlay(QWidget *parent = 0);
+  COverlayWidget(QWidget *parent = 0);
 
   /// Destructor.
-  virtual ~CTimeLineOverlay();
+  virtual ~COverlayWidget();
 
 protected:
   virtual QSize sizeHint() const;
@@ -45,7 +45,7 @@ public slots:
   void setText(const QString & p_msg);
 
 private:
-  QLabel *m_sessionInfoLabel;
+  QLabel *m_label;
 };
 
-#endif  // __TIMELINE_OVERLAY_HH__
+#endif  // __OVERLAY_WIDGET_HH__
