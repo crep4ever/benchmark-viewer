@@ -20,6 +20,7 @@
 
 #include <QString>
 #include <QDateTime>
+#include <QColor>
 #include <QList>
 
 class CNode
@@ -62,19 +63,22 @@ qint64 duration() const;
 
 QString toString() const;
 
+const QColor & color() const;
+void setColor(const QColor & p_color);
+
 private:
+  QString m_label;
+  QColor m_color;
+  QString m_category;
 
   QDateTime m_start;
   qint64 m_startMs;
   QDateTime m_stop;
   qint64 m_stopMs;
+  qint64 m_duration;
   QList<QDateTime> m_steps;
 
-  QString m_label;
-  QString m_category;
   int m_level;
-  qint64 m_duration;
-
   CNode *m_parent;
   QList<CNode *> m_children;
 };

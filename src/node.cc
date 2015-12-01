@@ -21,15 +21,16 @@
 #include "utils.hh"
 
 CNode::CNode() :
+m_label(),
+m_color(),
+m_category(),
 m_start(),
 m_startMs(0),
 m_stop(),
 m_stopMs(0),
-m_steps(),
-m_label(),
-m_category(),
-m_level(0),
 m_duration(0),
+m_steps(),
+m_level(0),
 m_parent(0),
 m_children()
 {
@@ -152,6 +153,16 @@ bool CNode::isValid() const
 qint64 CNode::duration() const
 {
   return m_duration;
+}
+
+const QColor & CNode::color() const
+{
+  return m_color;
+}
+
+void CNode::setColor(const QColor & p_color)
+{
+  m_color = p_color;
 }
 
 QString CNode::toString() const
