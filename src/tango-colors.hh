@@ -64,67 +64,65 @@ static QColor _TangoAluminium4(QColor(136, 138, 133));
 static QColor _TangoAluminium5(QColor(85, 87, 83));
 static QColor _TangoAluminium6(QColor(46, 52, 54));
 
-namespace
+static inline QColor pickColor(int i)
 {
-  QColor pickColor(int i)
+  const int id = i % 24;
+  switch (id)
   {
-    const int id = i % 24;
-    switch (id)
-      {
-      case 0:
-	return _TangoSkyBlue1;
-      case 1:
-	return _TangoScarletRed1;
-      case 2:
-	return _TangoChameleon1;
-      case 3:
-	return _TangoAluminium2;
-      case 4:
-	return _TangoOrange1;
-      case 5:
-	return _TangoPlum1;
-      case 6:
-	return _TangoButter1;
-      case 7:
-	return _TangoChocolate1;
+    case 0:
+    return _TangoSkyBlue1;
+    case 1:
+    return _TangoScarletRed1;
+    case 2:
+    return _TangoChameleon1;
+    case 3:
+    return _TangoAluminium2;
+    case 4:
+    return _TangoOrange1;
+    case 5:
+    return _TangoPlum1;
+    case 6:
+    return _TangoButter1;
+    case 7:
+    return _TangoChocolate1;
 
-      case 8:
-	return _TangoSkyBlue3;
-      case 9:
-	return _TangoScarletRed3;
-      case 10:
-	return _TangoChameleon3;
-      case 11:
-	return _TangoAluminium6;
-      case 12:
-	return _TangoOrange3;
-      case 13:
-	return _TangoPlum3;
-      case 14:
-	return _TangoButter3;
-      case 15:
-	return _TangoChocolate3;
+    case 8:
+    return _TangoSkyBlue3;
+    case 9:
+    return _TangoScarletRed3;
+    case 10:
+    return _TangoChameleon3;
+    case 11:
+    return _TangoAluminium6;
+    case 12:
+    return _TangoOrange3;
+    case 13:
+    return _TangoPlum3;
+    case 14:
+    return _TangoButter3;
+    case 15:
+    return _TangoChocolate3;
 
-      case 16:
-	return _TangoSkyBlue2;
-      case 17:
-	return _TangoScarletRed2;
-      case 18:
-	return _TangoChameleon2;
-      case 19:
-	return _TangoAluminium4;
-      case 20:
-	return _TangoOrange2;
-      case 21:
-	return _TangoPlum2;
-      case 22:
-	return _TangoButter2;
-      case 23:
-	return _TangoChocolate2;
-      }
-
-    return QColor();
+    case 16:
+    return _TangoSkyBlue2;
+    case 17:
+    return _TangoScarletRed2;
+    case 18:
+    return _TangoChameleon2;
+    case 19:
+    return _TangoAluminium4;
+    case 20:
+    return _TangoOrange2;
+    case 21:
+    return _TangoPlum2;
+    case 22:
+    return _TangoButter2;
+    case 23:
+    return _TangoChocolate2;
   }
+
+  return QColor();
 }
+
 
 #endif  // __TANGO_COLORS_HH__
