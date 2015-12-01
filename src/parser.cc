@@ -97,7 +97,7 @@ bool CParser::parse(const QString & p_fileName)
       node->setStart(QDateTime::fromString(date, dateFormat));
       node->setLevel(level++);
     }
-    else if (type == stop)
+    else if (type == stop && level > 0)
     {
       --level;
       node->setStop(QDateTime::fromString(date, dateFormat));
@@ -124,40 +124,46 @@ bool CParser::parse(const QString & p_fileName)
   return true;
 }
 
-void CParser::computeTreeModel()
+int CParser::computeDepth() const
 {
-  QElapsedTimer timer;
-  timer.start();
-
   int depth = 0;
   foreach(CNode *node, m_nodes)
   {
     depth = qMax(node->level(), depth);
   }
+  return depth;
+}
 
+void CParser::computeTreeModel()
+{
+  QElapsedTimer timer;
+  timer.start();
+
+  const int depth = computeDepth();
+  QVector< QList<CNode *> > m_levels(depth + 1);
   foreach(CNode *node, m_nodes)
   {
-    if (node->level() == depth)
+    m_levels[node->level()] << node;
+  }
+
+  for (int level = 0; level < depth; ++level)
+  {
+    const QList<CNode *> & nodes = m_levels[level];
+    foreach (CNode *node, nodes)
     {
-      continue;
-    }
+      const qint64 start = node->startMs();
+      const qint64 stop  = node->stopMs();
 
-    const qint64 start = node->startMs();
-    const qint64 stop  = node->stopMs();
-
-    foreach(CNode *candidate, m_nodes)
-    {
-      if (candidate->level() != node->level() + 1)
+      const QList<CNode *> & candidates = m_levels[level + 1];
+      foreach (CNode *candidate, candidates)
       {
-        continue;
-      }
+        const qint64 candidateStart = candidate->startMs();
+        const qint64 candidateStop  = candidate->stopMs();
 
-      const qint64 candidateStart = candidate->startMs();
-      const qint64 candidateStop  = candidate->stopMs();
-
-      if (candidateStart >= start && candidateStop <= stop)
-      {
-        node->addChild(candidate);
+        if (candidateStart >= start && candidateStop <= stop)
+        {
+          node->addChild(candidate);
+        }
       }
     }
   }

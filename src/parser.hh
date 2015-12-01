@@ -45,6 +45,7 @@ const QList<CNode*> & nodes() const;
 private:
   bool parse(const QString & p_fileName);
   void computeTreeModel();
+  int computeDepth() const;
 
 private:
   QList<CNode*> m_nodes;
