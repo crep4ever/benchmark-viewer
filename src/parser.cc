@@ -26,6 +26,7 @@
 #include <QDebug>
 
 #include "node.hh"
+#include "tango-colors.hh"
 
 CParser::CParser(const QString & p_fileName) :
 m_nodes()
@@ -94,6 +95,7 @@ bool CParser::parse(const QString & p_fileName)
     {
       node = new CNode();
       node->setLabel(label);
+      node->setColor(pickColor(qHash(label)));
       incompleteNodes[label] = node;
     }
 

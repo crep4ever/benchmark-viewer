@@ -21,7 +21,6 @@
 #include <QGraphicsRectItem>
 #include <QAction>
 #include <QElapsedTimer>
-#include <QCryptographicHash>
 #include <QtGlobal>
 #include <QDebug>
 
@@ -53,7 +52,7 @@ CScene::CScene(const QList<CNode*> & p_nodes) : QGraphicsScene()
     item->setPos(x, y);
     item->setRect(0, 0, w, h);
     item->setNode(node);
-    item->setBrush(pickColor(qHash(node->label())));
+    item->setBrush(node->color());
     item->setPen(Qt::NoPen);
     item->setToolTip(node->toString());
     item->setFlags(QGraphicsItem::ItemIsSelectable);
