@@ -65,30 +65,20 @@ bool CParser::parse(const QString & p_fileName)
   const int nbTokens = 4;
 
   QTextStream stream(&file);
-  QString data = stream.readAll();
-  file.close();
-
-  if (data.isEmpty())
-  {
-    qWarning() << "Empty file " << p_fileName;
-    return false;
-  }
 
   QHash<QString, CNode*> incompleteNodes;
-  QStringList lines = data.split("\n");
-
-  m_nodes.reserve(lines.count() / 2);
   int level = 0;
-  foreach(const QString & line, lines)
+  while (!stream.atEnd())
   {
-    QString copy = line;
-    const QStringList & tokens = copy.replace("\"", "").split(separator);
+    QString line = stream.readLine();
+    const QStringList & tokens = line.replace("\"", "").split(separator);
+
     if (tokens.count() < nbTokens)
     {
       continue;
     }
 
-    const QString label = tokens[(int) TOKEN_LABEL];
+    const QString & label = tokens[(int) TOKEN_LABEL];
 
     CNode *node = incompleteNodes[label];
     if (!node) // new node
@@ -124,6 +114,7 @@ bool CParser::parse(const QString & p_fileName)
       node = 0;
     }
   }
+  file.close();
 
   qDebug() << "File" << p_fileName << "processed in" << timer.elapsed() << "ms";
   qDebug() << "Nodes: valid" << m_nodes.size() << "; invalid" << incompleteNodes.size();
