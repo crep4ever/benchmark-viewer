@@ -1,8 +1,0 @@
-action1, vision, start, 20:44:36
-action2, algo, start, 20:44:37
-action2, algo, step, 20:44:40
-action2, algo, stop, 20:44:46
-action3, algo, start, 20:44:46
-action3, algo, stop, 20:44:56
-action1, vision, stop, 20:44:56
-
