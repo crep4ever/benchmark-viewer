@@ -124,5 +124,27 @@ static inline QColor pickColor(int i)
   return QColor();
 }
 
+static inline bool isColorBright(const QColor & p_color)
+{
+  // yellow
+  return (p_color == _TangoButter1 ||
+          p_color == _TangoButter2 ||
+          p_color == _TangoChameleon1 ||
+          p_color == _TangoChameleon2 ||
+          p_color == _TangoOrange1 ||
+          p_color == _TangoOrange2 ||
+          p_color == _TangoSkyBlue1 ||
+          p_color == _TangoPlum1 ||
+          p_color == _TangoChocolate1 ||
+          p_color == _TangoScarletRed1 ||
+          p_color == _TangoAluminium1 ||
+          p_color == _TangoAluminium2 ||
+          p_color == _TangoAluminium3);
+}
+
+static inline bool isColorDark(const QColor & p_color)
+{
+  return !isColorBright(p_color);
+}
 
 #endif  // __TANGO_COLORS_HH__
