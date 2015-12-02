@@ -165,6 +165,7 @@ void CTimeLineView::mousePressEvent(QMouseEvent *p_event)
     m_secondSelection->setNode(0);
     m_firstSelection->setVisible(false);
     m_secondSelection->setVisible(false);
+    emit currentNodeChanged(0);
   }
 
   QGraphicsView::mousePressEvent(p_event);
