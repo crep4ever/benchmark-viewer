@@ -43,7 +43,7 @@ class CMainWindow : public QMainWindow
 
 public:
   /// Constructor.
-  CMainWindow(QWidget *parent = 0);
+  CMainWindow(QWidget *p_parent = 0);
 
   /// Destructor.
   ~CMainWindow();
@@ -56,10 +56,10 @@ protected:
   /*!
     Saves settings before closing the application.
   */
-  void closeEvent(QCloseEvent *event);
+  void closeEvent(QCloseEvent *p_event);
 
 public slots:
-  void open(const QString &filename);
+  void open(const QString & p_filename);
 
 private slots:
   void open();

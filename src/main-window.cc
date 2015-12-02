@@ -43,8 +43,7 @@
 #include "utils.hh"
 #include "config.hh"
 
-CMainWindow::CMainWindow(QWidget *parent)
-: QMainWindow(parent)
+CMainWindow::CMainWindow(QWidget *p_parent) : QMainWindow(p_parent)
 , m_mainToolBar(0)
 , m_mainWidget(0)
 , m_scene(0)
@@ -79,11 +78,11 @@ CMainWindow::~CMainWindow()
 {
 }
 
-void CMainWindow::readSettings(bool firstLaunch)
+void CMainWindow::readSettings(bool p_firstLaunch)
 {
   QSettings settings;
   settings.beginGroup("general");
-  if (firstLaunch)
+  if (p_firstLaunch)
   {
     resize(settings.value("size", QSize(800,600)).toSize());
     move(settings.value("pos", QPoint(200, 200)).toPoint());
@@ -161,10 +160,10 @@ void CMainWindow::createActions()
 }
 
 
-void CMainWindow::closeEvent(QCloseEvent *event)
+void CMainWindow::closeEvent(QCloseEvent *p_event)
 {
   writeSettings();
-  event->accept();
+  p_event->accept();
 }
 
 void CMainWindow::createMenus()
