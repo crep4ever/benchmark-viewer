@@ -1,0 +1,10 @@
+.build*
+src/config.h
+build
+buildpackage.sh
+benchmark-viewer
+doc/html
+doc/man
+doc/latex
+todo
+data
