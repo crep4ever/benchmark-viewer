@@ -25,6 +25,7 @@
 
 COverlayWidget::COverlayWidget(QWidget *p_parent) : QWidget(p_parent)
   , m_label(new QLabel)
+  , m_opacity(0.6)
 {
   setStyleSheet("background: transparent;");
   setAttribute(Qt::WA_TranslucentBackground);
@@ -52,7 +53,7 @@ QSize COverlayWidget::sizeHint() const
 void COverlayWidget::paintEvent(QPaintEvent* /*event*/)
 {
   QColor backgroundColor = palette().dark().color();
-  backgroundColor.setAlpha(150);
+  backgroundColor.setAlpha((1 - m_opacity) * 255);
   QPainter customPainter(this);
   customPainter.fillRect(rect(), backgroundColor);
 }
@@ -60,4 +61,14 @@ void COverlayWidget::paintEvent(QPaintEvent* /*event*/)
 void COverlayWidget::setText(const QString & p_text)
 {
   m_label->setText(p_text);
+}
+
+float COverlayWidget::opacity() const
+{
+  return m_opacity;
+}
+
+void COverlayWidget::setOpacity(const float p_opacity)
+{
+  m_opacity = p_opacity;
 }

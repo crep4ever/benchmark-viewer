@@ -37,15 +37,19 @@ public:
   /// Destructor.
   virtual ~COverlayWidget();
 
+  float opacity() const;
+
 protected:
   virtual QSize sizeHint() const;
   void paintEvent(QPaintEvent* event);
 
 public slots:
   void setText(const QString & p_msg);
+  void setOpacity(const float p_opacity);
 
 private:
   QLabel *m_label;
+  float m_opacity;
 };
 
 #endif  // __OVERLAY_WIDGET_HH__
