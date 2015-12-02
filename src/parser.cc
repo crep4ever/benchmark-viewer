@@ -68,6 +68,7 @@ bool CParser::parse(const QString & p_fileName)
 
   QHash<QString, CNode*> incompleteNodes;
   int level = 0;
+  int skips = 0;
   while (!stream.atEnd())
   {
     QString line = stream.readLine();
@@ -112,6 +113,7 @@ bool CParser::parse(const QString & p_fileName)
     {
       if (node->duration() < 1) // skip nodes under 1ms
       {
+        ++skips;
         delete node;
       }
       else
@@ -126,7 +128,7 @@ bool CParser::parse(const QString & p_fileName)
   file.close();
 
   qDebug() << "File" << p_fileName << "processed in" << timer.elapsed() << "ms";
-  qDebug() << "Nodes: valid" << m_nodes.size() << "; invalid" << incompleteNodes.size();
+  qDebug() << "Nodes: valid" << m_nodes.size() << "; skipped" << skips << "; invalid" << incompleteNodes.size();
 
   // delete invalid nodes
   foreach (CNode * node, incompleteNodes)
