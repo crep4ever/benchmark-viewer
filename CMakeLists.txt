@@ -82,10 +82,12 @@ target_link_libraries(${BENCHMARK_VIEWER_APPLICATION_NAME} ${LIBRARIES})
 
 # {{{ Internationalization
 set (TRANSLATIONS
-  lang/benchmark-viewer_fr.ts)
+#lang/benchmark-viewer_fr.ts
+)
 
 set (COMPILED_TRANSLATIONS
-  lang/benchmark-viewer_fr.qm)
+#lang/benchmark-viewer_fr.qm
+)
 
 add_custom_target(
   translations_target
