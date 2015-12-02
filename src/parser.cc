@@ -23,6 +23,7 @@
 #include <QStringList>
 #include <QDateTime>
 #include <QtGlobal>
+#include <QSettings>
 #include <QDebug>
 
 #include "node.hh"
@@ -44,6 +45,23 @@ const QList<CNode*> & CParser::nodes() const
   return m_nodes;
 }
 
+int CParser::computeMaxTokenPosition() const
+{
+  QSettings settings;
+  settings.beginGroup("parser");
+  const int tokenDateTimePosition = settings.value("tokenDateTimePosition", 0).toInt();
+  const int tokenLabelPosition = settings.value("tokenLabelPosition", 1).toInt();
+  const int tokenActionPosition = settings.value("tokenActionPosition", 2).toInt();
+  const int tokenCommentPosition = settings.value("tokenCommentPosition", 4).toInt();
+  settings.endGroup();
+
+  int max = 0;
+  max = qMax(max, tokenDateTimePosition);
+  max = qMax(max, tokenLabelPosition);
+  max = qMax(max, tokenActionPosition);
+  max = qMax(max, tokenCommentPosition);
+  return max;
+}
 
 bool CParser::parse(const QString & p_fileName)
 {
@@ -57,12 +75,21 @@ bool CParser::parse(const QString & p_fileName)
     return false;
   }
 
-  const QString start = "START";
-  const QString stop = "STOP";
-  const QString step = "STEP";
-  const QString separator = ",";
-  const QString dateFormat = "yyyy-M-d hh:mm:ss.zzz";
-  const int nbTokens = 4;
+  QSettings settings;
+  settings.beginGroup("parser");
+  const QString start = settings.value("actionStartLabel", "START").toString();
+  const QString stop = settings.value("actionStopLabel", "STOP").toString();
+  const QString step = settings.value("actionStepLabel", "STEP").toString();
+  const QString separator = settings.value("tokensSeparator", ",").toString();
+  const QString dateFormat = settings.value("dateTimeFormat", "yyyy-M-d hh:mm:ss.zzz").toString();
+
+  const int tokenDateTimePosition = settings.value("tokenDateTimePosition", 0).toInt();
+  const int tokenLabelPosition = settings.value("tokenLabelPosition", 1).toInt();
+  const int tokenActionPosition = settings.value("tokenActionPosition", 2).toInt();
+  const int tokenCommentPosition = settings.value("tokenCommentPosition", 4).toInt();
+  settings.endGroup();
+
+  const int minNumberOfTokens = computeMaxTokenPosition() + 1;
 
   QTextStream stream(&file);
 
@@ -74,12 +101,12 @@ bool CParser::parse(const QString & p_fileName)
     QString line = stream.readLine();
     const QStringList & tokens = line.replace("\"", "").split(separator);
 
-    if (tokens.count() < nbTokens)
+    if (tokens.count() < minNumberOfTokens)
     {
       continue;
     }
 
-    const QString & label = tokens[(int) TOKEN_LABEL];
+    const QString & label = tokens[tokenLabelPosition];
 
     CNode *node = incompleteNodes[label];
     if (!node) // new node
@@ -90,8 +117,8 @@ bool CParser::parse(const QString & p_fileName)
       incompleteNodes[label] = node;
     }
 
-    const QString type = tokens[(int) TOKEN_ACTION];
-    QString date = tokens[(int) TOKEN_DATE_TIME];
+    const QString type = tokens[tokenActionPosition];
+    QString date = tokens[tokenDateTimePosition];
     date.chop(3);
     if (type == start)
     {
@@ -106,7 +133,7 @@ bool CParser::parse(const QString & p_fileName)
     else if (type == step)
     {
       // TODO: warning, crash-prone if invalid src file
-      node->addStep(tokens[(int) TOKEN_COMMENT], QDateTime::fromString(date, dateFormat));
+      node->addStep(tokens[tokenCommentPosition], QDateTime::fromString(date, dateFormat));
     }
 
     if (node->isValid())

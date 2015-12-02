@@ -105,26 +105,28 @@ private:
   QWidget *m_content;
 };
 
-/**
- * \class DisplayPage
- * \brief DisplayPage is the config page used to specify
- * which components should be displayed/hidden
- * \image html pref-display.png
- */
-class DisplayPage : public Page
+class ParserPage : public Page
 {
   Q_OBJECT
 
 public:
   /// Constructor.
-  DisplayPage(QWidget *parent = 0);
+  ParserPage(QWidget *parent = 0);
 
 private:
   void readSettings();
   void writeSettings();
 
-  QCheckBox *m_statusBarCheckBox;
-  QCheckBox *m_toolBarCheckBox;
+  QLineEdit *m_dateTimeFormat;
+  QLineEdit *m_tokensSeparator;
+  QLineEdit *m_actionStartLabel;
+  QLineEdit *m_actionStopLabel;
+  QLineEdit *m_actionStepLabel;
+
+  QSpinBox *m_tokenDateTimePosition;
+  QSpinBox *m_tokenLabelPosition;
+  QSpinBox *m_tokenActionPosition;
+  QSpinBox *m_tokenCommentPosition;
 };
 
 

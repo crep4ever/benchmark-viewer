@@ -47,7 +47,7 @@ CInfoWidget::CInfoWidget(QWidget *p_parent) : QWidget(p_parent)
   m_childrenInfo->setSelectionBehavior(QAbstractItemView::SelectRows);
   m_childrenInfo->setColumnCount(3);
   m_childrenInfo->setWordWrap(true);
-  m_childrenInfo->setHorizontalHeaderLabels(QStringList() << tr("Child") << tr("Count") << tr("Percentage"));
+  m_childrenInfo->setHorizontalHeaderLabels(QStringList() << tr("Children") << tr("Count") << tr("Percentage"));
   m_childrenInfo->horizontalHeader()->setResizeMode(0, QHeaderView::Stretch);
   m_childrenInfo->verticalHeader()->setVisible(false);
   m_childrenInfo->setShowGrid(false);

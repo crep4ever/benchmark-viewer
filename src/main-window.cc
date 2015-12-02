@@ -87,7 +87,9 @@ void CMainWindow::readSettings(bool p_firstLaunch)
     resize(settings.value("size", QSize(800,600)).toSize());
     move(settings.value("pos", QPoint(200, 200)).toPoint());
     if (settings.value("maximized", isMaximized()).toBool())
-    showMaximized();
+    {
+      showMaximized();
+    }
   }
   m_openPath = settings.value("openPath", QDir::homePath()).toString();
   settings.endGroup();

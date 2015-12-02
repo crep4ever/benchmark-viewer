@@ -39,8 +39,7 @@
 
 // Config Dialog
 
-ConfigDialog::ConfigDialog(QWidget* parent)
-: QDialog(parent)
+ConfigDialog::ConfigDialog(QWidget *p_parent) : QDialog(p_parent)
 , m_contentsWidget(0)
 , m_pagesWidget(0)
 {
@@ -52,7 +51,7 @@ ConfigDialog::ConfigDialog(QWidget* parent)
   m_contentsWidget->setFixedWidth(110);
 
   m_pagesWidget = new QStackedWidget(this);
-  m_pagesWidget->addWidget(new DisplayPage(this));
+  m_pagesWidget->addWidget(new ParserPage(this));
 
   QDialogButtonBox *buttons = new QDialogButtonBox(QDialogButtonBox::Close);
   connect(buttons, SIGNAL(rejected()), this, SLOT(close()));
@@ -62,7 +61,7 @@ ConfigDialog::ConfigDialog(QWidget* parent)
 
   QBoxLayout *horizontalLayout = new QHBoxLayout;
   horizontalLayout->addWidget(m_contentsWidget);
-  horizontalLayout->addWidget(m_pagesWidget, 1);
+  horizontalLayout->addWidget(m_pagesWidget, 10);
 
   QBoxLayout *mainLayout = new QVBoxLayout;
   mainLayout->addLayout(horizontalLayout);
@@ -71,7 +70,7 @@ ConfigDialog::ConfigDialog(QWidget* parent)
 
   setLayout(mainLayout);
   setWindowTitle(tr("Preferences"));
-  resize(600,600);
+  resize(600, 600);
 }
 
 CMainWindow* ConfigDialog::parent() const
@@ -83,11 +82,11 @@ CMainWindow* ConfigDialog::parent() const
 
 void ConfigDialog::createIcons()
 {
-  QListWidgetItem *displayButton = new QListWidgetItem(m_contentsWidget);
-  displayButton->setIcon(QIcon::fromTheme("preferences-desktop", QIcon(":/icons/tango/48x48/categories/preferences-desktop.png")));
-  displayButton->setText(tr("Display"));
-  displayButton->setTextAlignment(Qt::AlignHCenter);
-  displayButton->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
+  QListWidgetItem *parserButton = new QListWidgetItem(m_contentsWidget);
+  parserButton->setIcon(QIcon::fromTheme("preferences-desktop", QIcon(":/icons/tango/48x48/categories/preferences-desktop.png")));
+  parserButton->setText(tr("Parser"));
+  parserButton->setTextAlignment(Qt::AlignHCenter);
+  parserButton->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
 
   connect(m_contentsWidget,
     SIGNAL(currentItemChanged(QListWidgetItem*,QListWidgetItem*)),
@@ -105,7 +104,7 @@ void ConfigDialog::changePage(QListWidgetItem *current, QListWidgetItem *previou
 void ConfigDialog::closeEvent(QCloseEvent *event)
 {
   Q_UNUSED(event);
-  for ( int i = 0 ; i < m_pagesWidget->count() ; ++i )
+  for (int i = 0; i < m_pagesWidget->count(); ++i)
   {
     m_pagesWidget->widget(i)->close();
   }
@@ -114,8 +113,7 @@ void ConfigDialog::closeEvent(QCloseEvent *event)
 
 // Page
 
-Page::Page(QWidget *parent)
-: QScrollArea(parent)
+Page::Page(QWidget *p_parent) : QScrollArea(p_parent)
 , m_content(new QWidget)
 {
 }
@@ -127,10 +125,10 @@ ConfigDialog * Page::parent() const
   return p;
 }
 
-void Page::closeEvent(QCloseEvent *event)
+void Page::closeEvent(QCloseEvent *p_event)
 {
   writeSettings();
-  event->accept();
+  p_event->accept();
 }
 
 void Page::readSettings(){}
@@ -144,43 +142,81 @@ void Page::setLayout(QLayout *layout)
 }
 
 
-// Display Page
+// Parser Page
 
-DisplayPage::DisplayPage(QWidget *parent) : Page(parent)
-, m_statusBarCheckBox(0)
-, m_toolBarCheckBox(0)
+ParserPage::ParserPage(QWidget *p_parent) : Page(p_parent)
+, m_dateTimeFormat(new QLineEdit)
+, m_tokensSeparator(new QLineEdit)
+, m_actionStartLabel(new QLineEdit)
+, m_actionStopLabel(new QLineEdit)
+, m_actionStepLabel(new QLineEdit)
+, m_tokenDateTimePosition(new QSpinBox)
+, m_tokenLabelPosition(new QSpinBox)
+, m_tokenActionPosition(new QSpinBox)
+, m_tokenCommentPosition(new QSpinBox)
 {
-  QGroupBox *displayApplicationGroupBox = new QGroupBox(tr("Application"));
-  m_statusBarCheckBox = new QCheckBox(tr("Status bar"));
-  m_toolBarCheckBox = new QCheckBox(tr("Tool bar"));
+  m_dateTimeFormat->setMinimumWidth(180);
 
-  QVBoxLayout *displayApplicationLayout = new QVBoxLayout;
-  displayApplicationLayout->addWidget(m_statusBarCheckBox);
-  displayApplicationLayout->addWidget(m_toolBarCheckBox);
-  displayApplicationGroupBox->setLayout(displayApplicationLayout);
+  QGroupBox *fileContentGroupBox = new QGroupBox(tr("File content format"));
+  QFormLayout *fileContentLayout = new QFormLayout;
+  fileContentLayout->addRow(tr("DateTime format"), m_dateTimeFormat);
+  fileContentLayout->addRow(tr("Tokens separator"), m_tokensSeparator);
+  fileContentLayout->addRow(tr("Start label"), m_actionStartLabel);
+  fileContentLayout->addRow(tr("Stop label"), m_actionStopLabel);
+  fileContentLayout->addRow(tr("Step label"), m_actionStepLabel);
+  fileContentGroupBox->setLayout(fileContentLayout);
+
+  QGroupBox *tokensPositionGroupBox = new QGroupBox(tr("Tokens position"));
+  QFormLayout *tokensPositionLayout = new QFormLayout;
+  tokensPositionLayout->addRow(tr("DateTime"), m_tokenDateTimePosition);
+  tokensPositionLayout->addRow(tr("Label"), m_tokenLabelPosition);
+  tokensPositionLayout->addRow(tr("Action"), m_tokenActionPosition);
+  tokensPositionLayout->addRow(tr("Comment"), m_tokenCommentPosition);
+  tokensPositionGroupBox->setLayout(tokensPositionLayout);
 
   QVBoxLayout *mainLayout = new QVBoxLayout;
-  mainLayout->addWidget(displayApplicationGroupBox);
+  mainLayout->addWidget(fileContentGroupBox);
+  mainLayout->addWidget(tokensPositionGroupBox);
   mainLayout->addStretch(1);
   setLayout(mainLayout);
 
   readSettings();
 }
 
-void DisplayPage::readSettings()
+void ParserPage::readSettings()
 {
   QSettings settings;
-  settings.beginGroup("display");
-  m_statusBarCheckBox->setChecked(settings.value("statusBar", true).toBool());
-  m_toolBarCheckBox->setChecked(settings.value("toolBar", true).toBool());
+  settings.beginGroup("parser");
+
+  m_dateTimeFormat->setText(settings.value("dateTimeFormat", "yyyy-M-d hh:mm:ss.zzz").toString());
+  m_tokensSeparator->setText(settings.value("tokensSeparator", ",").toString());
+  m_actionStartLabel->setText(settings.value("actionStartLabel", "START").toString());
+  m_actionStopLabel->setText(settings.value("actionStopLabel", "STOP").toString());
+  m_actionStepLabel->setText(settings.value("actionStepLabel", "STEP").toString());
+
+  m_tokenDateTimePosition->setValue(settings.value("tokenDateTimePosition", 0).toInt());
+  m_tokenLabelPosition->setValue(settings.value("tokenLabelPosition", 1).toInt());
+  m_tokenActionPosition->setValue(settings.value("tokenActionPosition", 2).toInt());
+  m_tokenCommentPosition->setValue(settings.value("tokenCommentPosition", 4).toInt());
+
   settings.endGroup();
 }
 
-void DisplayPage::writeSettings()
+void ParserPage::writeSettings()
 {
   QSettings settings;
-  settings.beginGroup("display");
-  settings.setValue("statusBar", m_statusBarCheckBox->isChecked());
-  settings.setValue("toolBar", m_toolBarCheckBox->isChecked());
+  settings.beginGroup("parser");
+
+  settings.setValue("dateTimeFormat", m_dateTimeFormat->text());
+  settings.setValue("tokensSeparator", m_tokensSeparator->text());
+  settings.setValue("actionStartLabel", m_actionStartLabel->text());
+  settings.setValue("actionStopLabel", m_actionStopLabel->text());
+  settings.setValue("actionStepLabel", m_actionStepLabel->text());
+
+  settings.setValue("tokenDateTimePosition", m_tokenDateTimePosition->value());
+  settings.setValue("tokenLabelPosition", m_tokenLabelPosition->value());
+  settings.setValue("m_tokenActionPosition", m_tokenActionPosition->value());
+  settings.setValue("m_tokenCommentPosition", m_tokenCommentPosition->value());
+
   settings.endGroup();
 }

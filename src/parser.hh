@@ -27,16 +27,6 @@ class CParser
 {
 private:
 
-enum TOKEN
-{
-  TOKEN_DATE_TIME=0,
-  TOKEN_LABEL=1,
-  TOKEN_ACTION=2,
-  TOKEN_DURATION=3,
-  TOKEN_COMMENT=4,
-  TOKEN_CATEGORY=5
-};
-
 public:
   CParser(const QString & p_fileName);
   ~CParser();
@@ -44,6 +34,7 @@ public:
 const QList<CNode*> & nodes() const;
 
 private:
+  int computeMaxTokenPosition() const;
   bool parse(const QString & p_fileName);
   void computeTreeModel();
   int computeDepth() const;
