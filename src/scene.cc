@@ -61,7 +61,7 @@ CScene::CScene(const QList<CNode*> & p_nodes) : QGraphicsScene()
     label->setParentItem(item);
     label->setPos(w * 0.02, h / 2 -1); // coordinates relative to parent item
     label->setBrush(isColorBright(node->color()) ? _TangoAluminium6 : _TangoAluminium1);
-    label->setFlags(QGraphicsItem::ItemIgnoresTransformations);
+    label->setFlags(QGraphicsItem::ItemIgnoresTransformations | QGraphicsItem::ItemIgnoresParentOpacity);
 
     addItem(item);
   }
