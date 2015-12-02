@@ -188,7 +188,7 @@ void ParserPage::readSettings()
   QSettings settings;
   settings.beginGroup("parser");
 
-  m_dateTimeFormat->setText(settings.value("dateTimeFormat", "yyyy-M-d hh:mm:ss.zzz").toString());
+  m_dateTimeFormat->setText(settings.value("dateTimeFormat", "yyyy-M-d hh:mm:ss.zzzzzz").toString());
   m_tokensSeparator->setText(settings.value("tokensSeparator", ",").toString());
   m_actionStartLabel->setText(settings.value("actionStartLabel", "START").toString());
   m_actionStopLabel->setText(settings.value("actionStopLabel", "STOP").toString());

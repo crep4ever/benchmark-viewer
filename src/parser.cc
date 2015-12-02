@@ -81,13 +81,21 @@ bool CParser::parse(const QString & p_fileName)
   const QString stop = settings.value("actionStopLabel", "STOP").toString();
   const QString step = settings.value("actionStepLabel", "STEP").toString();
   const QString separator = settings.value("tokensSeparator", ",").toString();
-  const QString dateFormat = settings.value("dateTimeFormat", "yyyy-M-d hh:mm:ss.zzz").toString();
+  const QString dateTimeFormat = settings.value("dateTimeFormat", "yyyy-M-d hh:mm:ss.zzzzzz").toString();
 
   const int tokenDateTimePosition = settings.value("tokenDateTimePosition", 0).toInt();
   const int tokenLabelPosition = settings.value("tokenLabelPosition", 1).toInt();
   const int tokenActionPosition = settings.value("tokenActionPosition", 2).toInt();
   const int tokenCommentPosition = settings.value("tokenCommentPosition", 4).toInt();
   settings.endGroup();
+
+  bool chopMicrosec = false;
+  QString dateFormat = dateTimeFormat;
+  if (dateTimeFormat.endsWith("zzzzzz"))
+  {
+    dateFormat = dateFormat.replace("zzzzzz", "zzz");
+    chopMicrosec = true;
+  }
 
   const int minNumberOfTokens = computeMaxTokenPosition() + 1;
 
@@ -119,7 +127,11 @@ bool CParser::parse(const QString & p_fileName)
 
     const QString type = tokens[tokenActionPosition];
     QString date = tokens[tokenDateTimePosition];
-    date.chop(3);
+    if (chopMicrosec)
+    {
+      date.chop(3);
+    }
+
     if (type == start)
     {
       node->setStart(QDateTime::fromString(date, dateFormat));
