@@ -84,7 +84,7 @@ QDateTime CScene::first() const
   QDateTime first = m_nodes[0]->start();
   foreach (CNode *node, m_nodes)
   {
-    if (node->level() == 0 && node->start() < first)
+    if (node->start() < first)
     {
       first = node->start();
     }
@@ -103,7 +103,7 @@ QDateTime CScene::last() const
   QDateTime last = m_nodes[0]->stop();
   foreach (CNode *node, m_nodes)
   {
-    if (node->level() == 0 && node->stop() > last)
+    if (node->stop() > last)
     {
       last = node->stop();
     }
