@@ -62,6 +62,8 @@ private:
   // reposition overlays
   void updateOverlaysPositions();
 
+  void updateDiffInfo();
+
 private:
   QAction *m_zoomInAct;
   QAction *m_zoomOutAct;
@@ -70,6 +72,7 @@ private:
   COverlayWidget *m_sessionInfo;
   CNodeInfo *m_firstSelection;
   CNodeInfo *m_secondSelection;
+  COverlayWidget *m_diffInfo;
 };
 
 #endif // __TIMELINE_VIEW_HH__

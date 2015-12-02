@@ -31,6 +31,7 @@
 #include "graphics-node-item.hh"
 #include "overlay-widget.hh"
 #include "node-info-widget.hh"
+#include "utils.hh"
 
 CTimeLineView::CTimeLineView(CScene *p_scene) : QGraphicsView()
 , m_zoomInAct(0)
@@ -39,6 +40,7 @@ CTimeLineView::CTimeLineView(CScene *p_scene) : QGraphicsView()
 , m_sessionInfo(new COverlayWidget(this))
 , m_firstSelection(new CNodeInfo(this))
 , m_secondSelection(new CNodeInfo(this))
+, m_diffInfo(new COverlayWidget(this))
 {
   QElapsedTimer timer;
   timer.start();
@@ -54,6 +56,8 @@ CTimeLineView::CTimeLineView(CScene *p_scene) : QGraphicsView()
 
   m_firstSelection->setVisible(false);
   m_secondSelection->setVisible(false);
+  m_diffInfo->setVisible(false);
+  m_diffInfo->resize(QSize(250, 90));
 
   qDebug() << "Build timeline view in" << timer.elapsed() << "ms";
 }
@@ -168,6 +172,8 @@ void CTimeLineView::mousePressEvent(QMouseEvent *p_event)
     emit currentNodeChanged(0);
   }
 
+  updateDiffInfo();
+
   QGraphicsView::mousePressEvent(p_event);
 }
 
@@ -211,4 +217,36 @@ void CTimeLineView::updateOverlaysPositions()
   x = geometry().width()  - m_secondSelection->geometry().width();
   y = geometry().height() - m_secondSelection->geometry().height() - 15;
   m_secondSelection->move(x, y);
+
+  x = geometry().width()  / 2 - m_diffInfo->geometry().width() / 2;
+  y = geometry().height() - m_diffInfo->geometry().height() - 15;
+  m_diffInfo->move(x, y);
+}
+
+void CTimeLineView::updateDiffInfo()
+{
+  if (m_firstSelection->isVisible() && m_secondSelection->isVisible())
+  {
+    CNode *n1 = m_firstSelection->node();
+    CNode *n2 = m_secondSelection->node();
+    Q_ASSERT(n1 && n2);
+
+    const qint64 start1 = n1->startMs();
+    const qint64 stop1  = n1->stopMs();
+    const qint64 start2 = n2->startMs();
+    const qint64 stop2  = n2->stopMs();
+
+    QString info =
+            QString("START -> STOP  \t%1\n").arg(mSecsToString(stop2 - start1));
+    info += QString("STOP  -> START \t%1\n").arg(mSecsToString(start2 - stop1));
+    info += QString("START -> START \t%1\n").arg(mSecsToString(start2 - start1));
+    info += QString("STOP  -> STOP  \t%1\n").arg(mSecsToString(stop2 - stop1));
+
+    m_diffInfo->setText(info);
+    m_diffInfo->setVisible(true);
+  }
+  else
+  {
+    m_diffInfo->setVisible(false);
+  }
 }
