@@ -1,6 +1,6 @@
 # Description
+Visualize benchmark results as a timeline
 
-# Screenshot
 # Screenshot
 ![BenchmarkViewer](http://www.patacrep.com/data/images/benchmark-viewer.png)
 
