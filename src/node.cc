@@ -69,7 +69,15 @@ m_children()
 {
 }
 
-CNode::~CNode(){}
+CNode::~CNode()
+{
+  foreach (CStep *step, m_steps)
+  {
+    delete step;
+  }
+  m_steps.clear();
+  m_children.clear();
+}
 
 const QDateTime & CNode::start() const
 {

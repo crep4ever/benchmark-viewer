@@ -26,6 +26,10 @@ class QTabWidget;
 class QToolBar;
 class QSplitter;
 
+class CScene;
+class CTimeLineView;
+class CNodeInfo;
+
 /*!
   \file main-window.hh
   \class CMainWindow
@@ -37,9 +41,6 @@ class CMainWindow : public QMainWindow
 {
   Q_OBJECT
 
-public slots:
-  void open(const QString &filename);
-
 public:
   /// Constructor.
   CMainWindow(QWidget *parent = 0);
@@ -49,11 +50,16 @@ public:
 
   void showMessage(const QString & p_message) const;
 
+  void clear();
+
 protected:
   /*!
     Saves settings before closing the application.
   */
   void closeEvent(QCloseEvent *event);
+
+public slots:
+  void open(const QString &filename);
 
 private slots:
   void open();
@@ -74,9 +80,13 @@ private:
   void createMenus();
   void createToolBar();
 
+private:
   // Widgets
   QToolBar *m_mainToolBar;
   QSplitter *m_mainWidget;
+  CScene *m_scene;
+  CTimeLineView *m_timelineView;
+  CNodeInfo *m_treeView;
 
   // Application actions
   QAction *m_preferencesAct;
@@ -91,6 +101,7 @@ private:
 
   // Settings
   QString m_openPath;
+  bool m_isInitialized;
 };
 
 #endif  // __MAIN_WINDOW_HH__

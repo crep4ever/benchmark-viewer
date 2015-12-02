@@ -32,7 +32,7 @@ COverlayWidget::COverlayWidget(QWidget *p_parent) : QWidget(p_parent)
 
   m_label->setTextInteractionFlags(Qt::TextSelectableByMouse);
 
-  QVBoxLayout *mainLayout = new QVBoxLayout;
+  QVBoxLayout *mainLayout = new QVBoxLayout(this);
   mainLayout->addWidget(m_label);
   mainLayout->addStretch();
   setLayout(mainLayout);

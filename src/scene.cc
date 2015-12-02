@@ -69,7 +69,10 @@ CScene::CScene(const QList<CNode*> & p_nodes) : QGraphicsScene()
   qDebug() << "Build scene in" << timer.elapsed() << "ms";
 }
 
-CScene::~CScene(){}
+CScene::~CScene()
+{
+  clear();
+}
 
 QDateTime CScene::first() const
 {

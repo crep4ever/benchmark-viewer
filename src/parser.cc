@@ -108,9 +108,17 @@ bool CParser::parse(const QString & p_fileName)
       node->addStep(tokens[(int) TOKEN_COMMENT], QDateTime::fromString(date, dateFormat));
     }
 
-    if (node->isValid() && node->duration() > 1) // skip nodes under 1ms
+    if (node->isValid())
     {
-      m_nodes << node; // save valid node
+      if (node->duration() < 1) // skip nodes under 1ms
+      {
+        delete node;
+      }
+      else
+      {
+        m_nodes << node;
+      }
+
       incompleteNodes.remove(label);
       node = 0;
     }
@@ -119,6 +127,12 @@ bool CParser::parse(const QString & p_fileName)
 
   qDebug() << "File" << p_fileName << "processed in" << timer.elapsed() << "ms";
   qDebug() << "Nodes: valid" << m_nodes.size() << "; invalid" << incompleteNodes.size();
+
+  // delete invalid nodes
+  foreach (CNode * node, incompleteNodes)
+  {
+    delete node;
+  }
 
   computeTreeModel();
 

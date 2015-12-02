@@ -58,7 +58,12 @@ CTimeLineView::CTimeLineView(CScene *p_scene) : QGraphicsView()
   qDebug() << "Build timeline view in" << timer.elapsed() << "ms";
 }
 
-CTimeLineView::~CTimeLineView(){}
+CTimeLineView::~CTimeLineView()
+{
+  delete m_sessionInfo;
+  delete m_firstSelection;
+  delete m_secondSelection;
+}
 
 void CTimeLineView::createActions()
 {

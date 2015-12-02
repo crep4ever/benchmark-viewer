@@ -47,6 +47,9 @@ CMainWindow::CMainWindow(QWidget *parent)
 : QMainWindow(parent)
 , m_mainToolBar(0)
 , m_mainWidget(0)
+, m_scene(0)
+, m_timelineView(0)
+, m_treeView(0)
 , m_preferencesAct(0)
 , m_documentationAct(0)
 , m_bugsAct(0)
@@ -56,6 +59,7 @@ CMainWindow::CMainWindow(QWidget *parent)
 , m_timeLineViewAct(0)
 , m_treeViewAct(0)
 , m_openPath(QDir::homePath())
+, m_isInitialized(false)
 {
   setWindowTitle("Benchmark viewer");
   setWindowIcon(QIcon(":/icons/benchmark-viewer/src/benchmark-viewer.svg"));
@@ -249,36 +253,44 @@ void CMainWindow::toggleTreeView(bool p_visible)
 
 void CMainWindow::open(const QString & filename)
 {
+  if (m_isInitialized)
+  {
+      clear();
+  }
+
   QFileInfo fi(filename);
   m_openPath = fi.absolutePath();
-
-  showMessage(QString("Opening %1").arg(filename));
   writeSettings(); // updates openPath
 
+  showMessage(tr("Opening %1").arg(filename));
   CParser parser(filename);
-  showMessage(QString("%1 contains %2 nodes").arg(filename).arg(QString::number(parser.nodes().size())));
 
-  CScene *scene = new CScene(parser.nodes());
+  showMessage(tr("Building timeline"));
+  m_scene = new CScene(parser.nodes());
 
   QString sessionInfo = QString("%1\n%2\n%3 (%4 actions)")
     .arg(QFileInfo(filename).absoluteFilePath())
-    .arg(scene->first().date().toString(Qt::SystemLocaleLongDate))
-    .arg(::mSecsToString(scene->duration()))
+    .arg(m_scene->first().date().toString(Qt::SystemLocaleLongDate))
+    .arg(mSecsToString(m_scene->duration()))
     .arg(parser.nodes().size());
 
-  CTimeLineView *timelineView = new CTimeLineView(scene);
-  timelineView->sessionInfo()->setText(sessionInfo);
-  timelineView->setVisible(m_timeLineViewAct->isChecked());
-  m_mainWidget->addWidget(timelineView);
+  showMessage(tr("Initializing views"));
+  m_timelineView = new CTimeLineView(m_scene);
+  m_timelineView->sessionInfo()->setText(sessionInfo);
+  m_timelineView->setVisible(m_timeLineViewAct->isChecked());
+  m_mainWidget->addWidget(m_timelineView);
 
   // Call graph
-  CNodeInfo *treeView = new CNodeInfo;
-  treeView->setDisplaySteps(true);
-  treeView->setDisplayChildrenInfo(true);
-  connect(timelineView, SIGNAL(currentNodeChanged(CNode*)),
-          treeView, SLOT(setNode(CNode*)));
-  treeView->setVisible(m_treeViewAct->isChecked());
-  m_mainWidget->addWidget(treeView);
+  m_treeView = new CNodeInfo;
+  m_treeView->setDisplaySteps(true);
+  m_treeView->setDisplayChildrenInfo(true);
+  connect(m_timelineView, SIGNAL(currentNodeChanged(CNode*)),
+          m_treeView, SLOT(setNode(CNode*)));
+  m_treeView->setVisible(m_treeViewAct->isChecked());
+  m_mainWidget->addWidget(m_treeView);
+
+  showMessage(tr("Ready"));
+  m_isInitialized = true;
 }
 
 void CMainWindow::open()
@@ -299,4 +311,13 @@ void CMainWindow::open()
 void CMainWindow::showMessage(const QString & p_message) const
 {
   statusBar()->showMessage(p_message);
+}
+
+void CMainWindow::clear()
+{
+  delete m_timelineView;
+  delete m_treeView;
+  delete m_scene;
+
+  m_isInitialized = false;
 }
