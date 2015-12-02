@@ -38,9 +38,9 @@
 
 bool isFilenameSupported(const QString & filename)
 {
-  return (filename.endsWith(".xml") ||
-          filename.endsWith(".csv") ||
-          filename.endsWith(".txt"));
+  return (filename.contains(".xml") ||
+          filename.contains(".csv") ||
+          filename.contains(".txt"));
 }
 
 void printUsage()
