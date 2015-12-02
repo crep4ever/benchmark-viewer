@@ -17,9 +17,6 @@
 //******************************************************************************
 #include "node-info-widget.hh"
 
-#include <QBoxLayout>
-#include <QLabel>
-#include <QPainter>
 #include <QDebug>
 
 #include "node.hh"
@@ -28,7 +25,6 @@
 CNodeInfo::CNodeInfo(QWidget *p_parent) : COverlayWidget(p_parent)
   , m_node(0)
   , m_displaySteps(false)
-  , m_displayChildrenInfo(false)
 {
   resize(sizeHint());
 }
@@ -42,23 +38,28 @@ QSize CNodeInfo::sizeHint() const
   return QSize(250, 55);
 }
 
+CNode * CNodeInfo::node() const
+{
+  return m_node;
+}
+
 void CNodeInfo::setNode(CNode *p_node)
 {
   if (!p_node)
   {
-    clearInfo();
+    clear();
     return;
   }
 
   m_node = p_node;
-  updateInfo();
+  update();
 }
 
-void CNodeInfo::updateInfo()
+void CNodeInfo::update()
 {
   Q_ASSERT(m_node);
 
-  QString info = QString("<div style=\"float: left; border: 8px solid red\"></div><b>%1</b><br />").arg(m_node->label());
+  QString info = QString("<b>%1</b><br />").arg(m_node->label());
 
   info += QString("%1 -> %2 (%3)")
       .arg(m_node->start().time().toString())
@@ -79,68 +80,14 @@ void CNodeInfo::updateInfo()
     }
   }
 
-  if (m_displayChildrenInfo && !m_node->children().isEmpty())
-  {
-    info += QString("<hr>");
-    info += QString("<b>Children</b><br /");
-
-    QHash<QString, int> counter;
-    foreach (CNode* child, m_node->children())
-    {
-      ++counter[child->label()];
-    }
-
-    QHash<QString, int>::const_iterator it = counter.constBegin();
-    while (it != counter.constEnd())
-    {
-      const QString childLabel = it.key();
-      const int childCount = it.value();
-
-      info += QString("%1 (x %2)").arg(childLabel).arg(childCount);
-      info += QString("<br />");
-      ++it;
-    }
-  }
-
   setText(info);
 }
 
-void CNodeInfo::clearInfo()
+void CNodeInfo::clear()
 {
-  setText("");
+  setText(QString());
   m_node = 0;
 }
-
-
-// void CNodeInfo::updateDiffInfo()
-// {
-//   Q_ASSERT(m_firstNode && m_secondNode);
-//   if (m_firstNode->level() != m_secondNode->level())
-//   {
-//     return;
-//   }
-//
-//   const qint64 firstNodeStart =  m_firstNode->startMs();
-//   const qint64 firstNodeStop  =  m_firstNode->stopMs();
-//
-//   const qint64 secondNodeStart = m_secondNode->startMs();
-//   const qint64 secondNodeStop  = m_secondNode->stopMs();
-//
-//   qint64 gap = 0;
-//   if (secondNodeStart > firstNodeStop)
-//   {
-//     gap = secondNodeStart - firstNodeStop;
-//   }
-//   else
-//   {
-//     gap = firstNodeStart - secondNodeStop;
-//   }
-//
-//   QString info = QString("<b>Gap:</b> %1<br />")
-//     .arg(::mSecsToString(gap));
-//
-//   m_diffLabel->setText(info);
-// }
 
 bool CNodeInfo::displaySteps() const
 {
@@ -150,14 +97,4 @@ bool CNodeInfo::displaySteps() const
 void CNodeInfo::setDisplaySteps(const bool p_value)
 {
   m_displaySteps = p_value;
-}
-
-bool CNodeInfo::displayChildrenInfo() const
-{
-  return m_displayChildrenInfo;
-}
-
-void CNodeInfo::setDisplayChildrenInfo(const bool p_value)
-{
-  m_displayChildrenInfo = p_value;
 }

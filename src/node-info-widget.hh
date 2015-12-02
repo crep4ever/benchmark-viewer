@@ -39,9 +39,6 @@ public:
 
   bool displaySteps() const;
   void setDisplaySteps(const bool p_value);
-  
-  bool displayChildrenInfo() const;
-  void setDisplayChildrenInfo(const bool p_value);
 
 protected:
   virtual QSize sizeHint() const;
@@ -50,13 +47,12 @@ public slots:
   void setNode(CNode *p_node);
 
 private:
-  void clearInfo();
-  void updateInfo();
+  void clear();
+  void update();
 
 private:
   CNode *m_node;
   bool m_displaySteps;
-  bool m_displayChildrenInfo;
 };
 
 #endif  // __NODE_INFO_WIDGET_HH__
