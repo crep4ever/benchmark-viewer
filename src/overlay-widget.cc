@@ -46,7 +46,7 @@ COverlayWidget::~COverlayWidget()
 
 QSize COverlayWidget::sizeHint() const
 {
-  return QSize(600, 80);
+  return QSize(600, 70);
 }
 
 void COverlayWidget::paintEvent(QPaintEvent* /*event*/)

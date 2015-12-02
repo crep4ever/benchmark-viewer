@@ -193,10 +193,10 @@ COverlayWidget* CTimeLineView::sessionInfo() const
 void CTimeLineView::updateOverlaysPositions()
 {
   int x = 0;
-  int y = geometry().height() - m_firstSelection->geometry().height() - 10;
+  int y = geometry().height() - m_firstSelection->geometry().height() - 15;
   m_firstSelection->move(x, y);
 
   x = geometry().width()  - m_secondSelection->geometry().width();
-  y = geometry().height() - m_secondSelection->geometry().height() - 10;
+  y = geometry().height() - m_secondSelection->geometry().height() - 15;
   m_secondSelection->move(x, y);
 }

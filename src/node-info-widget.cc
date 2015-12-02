@@ -39,7 +39,7 @@ CNodeInfo::~CNodeInfo()
 
 QSize CNodeInfo::sizeHint() const
 {
-  return QSize(250, 80);
+  return QSize(250, 55);
 }
 
 void CNodeInfo::setNode(CNode *p_node)
