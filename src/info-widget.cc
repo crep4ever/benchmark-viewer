@@ -55,11 +55,15 @@ CInfoWidget::CInfoWidget(QWidget *p_parent) : QWidget(p_parent)
   m_mainLayout->addWidget(m_childrenInfo, 1);
 
   setLayout(m_mainLayout);
-  setMinimumWidth(450);
 }
 
 CInfoWidget::~CInfoWidget()
 {
+}
+
+QSize CInfoWidget::sizeHint() const
+{
+  return QSize(450, 600);
 }
 
 void CInfoWidget::setNode(CNode *p_node)

@@ -39,6 +39,9 @@ public:
 
   CNode *node() const;
 
+protected:
+  virtual QSize sizeHint() const;
+
 public slots:
   void setNode(CNode *p_node);
 
