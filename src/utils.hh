@@ -22,26 +22,34 @@
 
 static inline QString mSecsToString(const qint64 p_msecs)
 {
-  const int h  = p_msecs / (60  * 60 * 1000);
-  const int mn = p_msecs / (60 * 1000) - h * 60;
-  const int s  = p_msecs / 1000 - h * 60 * 60 - mn * 60;
-  const int ms = p_msecs - h * 60 * 60 * 1000 - mn * 60 * 1000 - s * 1000;
+  qint64 msecs = p_msecs;
+  QString sign;
+  if (p_msecs < 0)
+  {
+    msecs = -p_msecs;
+    sign = "-";
+  }
+
+  const int h  = msecs / (60  * 60 * 1000);
+  const int mn = msecs / (60 * 1000) - h * 60;
+  const int s  = msecs / 1000 - h * 60 * 60 - mn * 60;
+  const int ms = msecs - h * 60 * 60 * 1000 - mn * 60 * 1000 - s * 1000;
 
   if (h > 0)
   {
-    return QString("%1h %2mn").arg(h).arg(mn);
+    return QString("%1%2h %3mn").arg(sign).arg(h).arg(mn);
   }
   else if (mn > 0)
   {
-    return QString("%1mn %2s").arg(mn).arg(s);
+    return QString("%1%2mn %3s").arg(sign).arg(mn).arg(s);
   }
   else if (s > 0)
   {
-    return QString("%1.%2s").arg(s).arg(ms);
+    return QString("%1%2.%3s").arg(sign).arg(s).arg(ms);
   }
   else
   {
-    return QString("%1ms").arg(ms);
+    return QString("%1%2ms").arg(sign).arg(ms);
   }
 }
 
