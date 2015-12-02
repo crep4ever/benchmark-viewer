@@ -114,6 +114,12 @@ void CTimeLineView::mousePressEvent(QMouseEvent *p_event)
 {
   if (QGraphicsItem *item = itemAt(p_event->pos()))
   {
+    QGraphicsSimpleTextItem *textItem = dynamic_cast<QGraphicsSimpleTextItem*>(item);
+    if (textItem && textItem->parentItem())
+    {
+      item = textItem->parentItem();
+    }
+
     // restore style of previous item
     CGraphicsNodeItem *previous = dynamic_cast<CGraphicsNodeItem*>(m_currentSceneItem);
     if (previous)
