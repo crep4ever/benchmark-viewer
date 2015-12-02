@@ -52,6 +52,9 @@ CTimeLineView::CTimeLineView(CScene *p_scene) : QGraphicsView()
 
   updateLabelsVisibility();
 
+  m_firstSelection->setVisible(false);
+  m_secondSelection->setVisible(false);
+
   qDebug() << "Build timeline view in" << timer.elapsed() << "ms";
 }
 
