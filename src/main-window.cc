@@ -39,7 +39,7 @@
 #include "scene.hh"
 #include "timeline-view.hh"
 #include "overlay-widget.hh"
-#include "node-info-widget.hh"
+#include "info-widget.hh"
 #include "utils.hh"
 #include "config.hh"
 
@@ -152,11 +152,11 @@ void CMainWindow::createActions()
   m_timeLineViewAct->setChecked(true);
   connect(m_timeLineViewAct, SIGNAL(toggled(bool)), SLOT(toggleTimeLineView(bool)));
 
-  m_treeViewAct = new QAction(tr("&Call graph"), this);
+  m_treeViewAct = new QAction(tr("&Info panel"), this);
   m_treeViewAct->setIcon(QIcon(":/icons/benchmark-viewer/48x48/callgraph.png"));
-  m_treeViewAct->setStatusTip(tr("Display call graph of current action"));
+  m_treeViewAct->setStatusTip(tr("Display detailed information about current action"));
   m_treeViewAct->setCheckable(true);
-  m_treeViewAct->setChecked(false);
+  m_treeViewAct->setChecked(true);
   connect(m_treeViewAct, SIGNAL(toggled(bool)), SLOT(toggleTreeView(bool)));
 }
 
@@ -178,6 +178,9 @@ void CMainWindow::createMenus()
   fileMenu->addSeparator();
   fileMenu->addAction(m_exitAct);
 
+  QMenu *viewMenu = menuBar()->addMenu(tr("&View"));
+  viewMenu->addAction(m_treeViewAct);
+
   QMenu *helpMenu = menuBar()->addMenu(tr("&Help"));
   helpMenu->addAction(m_documentationAct);
   helpMenu->addAction(m_bugsAct);
@@ -191,8 +194,6 @@ void CMainWindow::createToolBar()
   m_mainToolBar->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
   m_mainToolBar->addAction(m_openAct);
   m_mainToolBar->addSeparator();
-  m_mainToolBar->addAction(m_timeLineViewAct);
-  m_mainToolBar->addAction(m_treeViewAct);
 
   addToolBar(m_mainToolBar);
   setUnifiedTitleAndToolBarOnMac(true);
@@ -280,10 +281,7 @@ void CMainWindow::open(const QString & filename)
   m_timelineView->setVisible(m_timeLineViewAct->isChecked());
   m_mainWidget->addWidget(m_timelineView);
 
-  // Call graph
-  m_treeView = new CNodeInfo;
-  m_treeView->setDisplaySteps(true);
-  m_treeView->setDisplayChildrenInfo(true);
+  m_treeView = new CInfoWidget;
   connect(m_timelineView, SIGNAL(currentNodeChanged(CNode*)),
           m_treeView, SLOT(setNode(CNode*)));
   m_treeView->setVisible(m_treeViewAct->isChecked());

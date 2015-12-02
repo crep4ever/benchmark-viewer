@@ -25,6 +25,7 @@ set(BENCHMARK_VIEWER_SOURCES
   src/overlay-widget.cc
   src/graphics-node-item.cc
   src/node-info-widget.cc
+  src/info-widget.cc
   )
 
 # header (moc)
@@ -36,6 +37,7 @@ set(BENCHMARK_VIEWER_QT_HEADER
   src/overlay-widget.hh
   src/graphics-node-item.hh
   src/node-info-widget.hh
+  src/info-widget.hh
   )
 
 # resources (rcs)

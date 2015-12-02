@@ -28,7 +28,7 @@ class QSplitter;
 
 class CScene;
 class CTimeLineView;
-class CNodeInfo;
+class CInfoWidget;
 
 /*!
   \file main-window.hh
@@ -86,7 +86,7 @@ private:
   QSplitter *m_mainWidget;
   CScene *m_scene;
   CTimeLineView *m_timelineView;
-  CNodeInfo *m_treeView;
+  CInfoWidget *m_treeView;
 
   // Application actions
   QAction *m_preferencesAct;
