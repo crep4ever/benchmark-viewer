@@ -37,6 +37,9 @@ public:
 
   CNode *node() const;
 
+  bool displaySteps() const;
+  void setDisplaySteps(const bool p_value);
+  
   bool displayChildrenInfo() const;
   void setDisplayChildrenInfo(const bool p_value);
 
@@ -52,6 +55,7 @@ private:
 
 private:
   CNode *m_node;
+  bool m_displaySteps;
   bool m_displayChildrenInfo;
 };
 

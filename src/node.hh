@@ -23,6 +23,26 @@
 #include <QColor>
 #include <QList>
 
+class CNode;
+class CStep
+{
+public:
+  CStep(CNode *p_parent, const QString & p_label, const QDateTime & p_dateTime);
+  ~CStep();
+
+  CNode *parent() const;
+
+  qint64 duration() const;
+
+  const QString & label() const;
+  void setLabel(const QString & p_label);
+
+private:
+  CNode *m_parent;
+  QString m_label;
+  qint64 m_duration;
+};
+
 class CNode
 {
 public:
@@ -37,9 +57,10 @@ const QDateTime & stop() const;
 void setStop(const QDateTime & p_dateTime);
 qint64 stopMs() const;
 
-const QList<QDateTime> & steps() const;
-void setSteps(const QList<QDateTime> & p_steps);
-void addStep(const QDateTime & p_dateTime);
+const QList<CStep*> & steps() const;
+void setSteps(const QList<CStep*> & p_steps);
+void addStep(const QString & p_label, const QDateTime & p_dateTime);
+void addStep(CStep *p_step);
 
 
 const QString & label() const;
@@ -76,7 +97,7 @@ private:
   QDateTime m_stop;
   qint64 m_stopMs;
   qint64 m_duration;
-  QList<QDateTime> m_steps;
+  QList<CStep*> m_steps;
 
   int m_level;
   CNode *m_parent;

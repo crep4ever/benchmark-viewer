@@ -27,6 +27,7 @@
 
 CNodeInfo::CNodeInfo(QWidget *p_parent) : COverlayWidget(p_parent)
   , m_node(0)
+  , m_displaySteps(false)
   , m_displayChildrenInfo(false)
 {
   resize(sizeHint());
@@ -59,14 +60,29 @@ void CNodeInfo::updateInfo()
 
   QString info = QString("<div style=\"float: left; border: 8px solid red\"></div><b>%1</b><br />").arg(m_node->label());
 
-  info += QString("%1 -> %2 (%3)\n\n")
+  info += QString("%1 -> %2 (%3)")
       .arg(m_node->start().time().toString())
       .arg(m_node->stop().time().toString())
-      .arg(::mSecsToString(m_node->duration()));
+      .arg(mSecsToString(m_node->duration()));
 
-  if (m_displayChildrenInfo)
+  if (m_displaySteps && !m_node->steps().isEmpty())
   {
     info += QString("<hr>");
+    info += QString("<b>Steps</b><br /");
+
+    foreach (CStep *step, m_node->steps())
+    {
+      const QString label = step->label();
+      info += QString("%2 (%3)<br />")
+      .arg(step->label())
+      .arg(mSecsToString(step->duration()));
+    }
+  }
+
+  if (m_displayChildrenInfo && !m_node->children().isEmpty())
+  {
+    info += QString("<hr>");
+    info += QString("<b>Children</b><br /");
 
     QHash<QString, int> counter;
     foreach (CNode* child, m_node->children())
@@ -125,6 +141,16 @@ void CNodeInfo::clearInfo()
 //
 //   m_diffLabel->setText(info);
 // }
+
+bool CNodeInfo::displaySteps() const
+{
+  return m_displaySteps;
+}
+
+void CNodeInfo::setDisplaySteps(const bool p_value)
+{
+  m_displaySteps = p_value;
+}
 
 bool CNodeInfo::displayChildrenInfo() const
 {

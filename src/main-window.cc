@@ -273,6 +273,7 @@ void CMainWindow::open(const QString & filename)
 
   // Call graph
   CNodeInfo *treeView = new CNodeInfo;
+  treeView->setDisplaySteps(true);
   treeView->setDisplayChildrenInfo(true);
   connect(timelineView, SIGNAL(currentNodeChanged(CNode*)),
           treeView, SLOT(setNode(CNode*)));

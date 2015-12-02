@@ -104,7 +104,8 @@ bool CParser::parse(const QString & p_fileName)
     }
     else if (type == step)
     {
-      node->addStep(QDateTime::fromString(date, dateFormat));
+      // TODO: warning, crash-prone if invalid src file
+      node->addStep(tokens[(int) TOKEN_COMMENT], QDateTime::fromString(date, dateFormat));
     }
 
     if (node->isValid() && node->duration() > 1) // skip nodes under 1ms

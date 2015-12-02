@@ -20,6 +20,39 @@
 #include <QDebug>
 #include "utils.hh"
 
+CStep::CStep(CNode *p_parent, const QString & p_label, const QDateTime & p_dateTime) :
+m_parent(p_parent),
+m_label(p_label),
+m_duration(0)
+{
+  m_duration = p_dateTime.toMSecsSinceEpoch() - p_parent->startMs();
+}
+
+CStep::~CStep(){}
+
+CNode *CStep::parent() const
+{
+  return m_parent;
+}
+
+qint64 CStep::duration() const
+{
+  return m_duration;
+}
+
+const QString & CStep::label() const
+{
+    return m_label;
+}
+
+void CStep::setLabel(const QString & p_label)
+{
+  m_label = p_label;
+}
+
+//------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
+
 CNode::CNode() :
 m_label(),
 m_color(),
@@ -79,19 +112,24 @@ qint64 CNode::stopMs() const
 }
 
 
-const QList<QDateTime> & CNode::steps() const
+const QList<CStep*> & CNode::steps() const
 {
   return m_steps;
 }
 
-void CNode::setSteps(const QList<QDateTime> & p_steps)
+void CNode::setSteps(const QList<CStep*> & p_steps)
 {
   m_steps = p_steps;
 }
 
-void CNode::addStep(const QDateTime & p_dateTime)
+void CNode::addStep(const QString & p_label, const QDateTime & p_dateTime)
 {
-    m_steps << p_dateTime;
+    m_steps << new CStep(this, p_label, p_dateTime);
+}
+
+void CNode::addStep(CStep *p_step)
+{
+    m_steps << p_step;
 }
 
 const QString & CNode::label() const
