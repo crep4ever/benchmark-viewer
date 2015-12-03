@@ -27,6 +27,7 @@
 #include "node.hh"
 #include "node-info-widget.hh"
 #include "tango-colors.hh"
+#include "utils.hh"
 
 CInfoWidget::CInfoWidget(QWidget *p_parent) : QWidget(p_parent)
   , m_node(0)
@@ -40,14 +41,20 @@ CInfoWidget::CInfoWidget(QWidget *p_parent) : QWidget(p_parent)
   m_nodeInfo->setVisible(false);
   m_mainLayout->addWidget(m_nodeInfo);
 
+  QStringList header;
+  header << tr("Child");
+  header << tr("Calls");
+  header << tr("Use");
+  header << tr("Sum");
+
   m_childrenInfo = new QTableWidget;
   m_childrenInfo->setAlternatingRowColors(true);
   m_childrenInfo->setEditTriggers(QAbstractItemView::NoEditTriggers);
   m_childrenInfo->setSelectionMode(QAbstractItemView::NoSelection);
   m_childrenInfo->setSelectionBehavior(QAbstractItemView::SelectRows);
-  m_childrenInfo->setColumnCount(3);
+  m_childrenInfo->setColumnCount(4);
   m_childrenInfo->setWordWrap(true);
-  m_childrenInfo->setHorizontalHeaderLabels(QStringList() << tr("Children") << tr("Count") << tr("Percentage"));
+  m_childrenInfo->setHorizontalHeaderLabels(header);
   m_childrenInfo->horizontalHeader()->setResizeMode(0, QHeaderView::Stretch);
   m_childrenInfo->verticalHeader()->setVisible(false);
   m_childrenInfo->setShowGrid(false);
@@ -116,6 +123,9 @@ void CInfoWidget::update()
     m_childrenInfo->setItem(row, col++, item);
 
     item = new QTableWidgetItem(QString("%1%").arg(childPercentage, 2, 10, QChar('0')));
+    m_childrenInfo->setItem(row, col++, item);
+
+    item = new QTableWidgetItem(mSecsToString(duration[childLabel]));
     m_childrenInfo->setItem(row, col++, item);
 
     ++row;
