@@ -10,7 +10,7 @@ set(CODENAME "")
 
 option(GENERATE_MANPAGES "generate manpages" ON)
 option(COMPRESS_MANPAGES "compress manpages" ON)
-option(ENABLE_OPENMP "multithreading with OpenMP" ON)
+option(ENABLE_OPENMP "multithreading with OpenMP" OFF)
 
 # {{{ CFLAGS
 if (CMAKE_BUILD_TYPE MATCHES "Release")
