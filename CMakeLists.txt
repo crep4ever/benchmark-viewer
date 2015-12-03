@@ -35,7 +35,6 @@ set(BENCHMARK_VIEWER_QT_HEADER
   src/scene.hh
   src/timeline-view.hh
   src/overlay-widget.hh
-  src/graphics-node-item.hh
   src/node-info-widget.hh
   src/info-widget.hh
   )
