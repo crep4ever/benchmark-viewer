@@ -69,12 +69,11 @@ void CNodeInfo::update()
   if (m_displaySteps && !m_node->steps().isEmpty())
   {
     info += QString("<hr>");
-    info += QString("<b>Steps</b><br /");
+    info += QString("<b>Steps</b><br />");
 
     foreach (CStep *step, m_node->steps())
     {
-      const QString label = step->label();
-      info += QString("%2 (%3)<br />")
+      info += QString("%1 (%2)<br />")
       .arg(step->label())
       .arg(mSecsToString(step->duration()));
     }
