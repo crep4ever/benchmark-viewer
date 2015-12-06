@@ -215,8 +215,8 @@ void ParserPage::writeSettings()
 
   settings.setValue("tokenDateTimePosition", m_tokenDateTimePosition->value());
   settings.setValue("tokenLabelPosition", m_tokenLabelPosition->value());
-  settings.setValue("m_tokenActionPosition", m_tokenActionPosition->value());
-  settings.setValue("m_tokenCommentPosition", m_tokenCommentPosition->value());
+  settings.setValue("tokenActionPosition", m_tokenActionPosition->value());
+  settings.setValue("tokenCommentPosition", m_tokenCommentPosition->value());
 
   settings.endGroup();
 }
