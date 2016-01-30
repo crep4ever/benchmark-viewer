@@ -2,7 +2,7 @@
 Visualize benchmark results as a timeline
 
 # Screenshot
-[BenchmarkViewer](doc/img/benchmark-viewer.png)
+![BenchmarkViewer](doc/img/benchmark-viewer.png)
 
 # Benchmark-viewer
 * required packages: cmake, libqt4-dev
@@ -26,7 +26,7 @@ that generates benchmark logs.
 >     ./a.out # generates benchmark logs in session.csv
 >     benchmark-viewer session.csv
 
-[Example](examples/example.png)
+![Example](examples/example.png)
 
 # Contact
 * romain.goffe@gmail.com
