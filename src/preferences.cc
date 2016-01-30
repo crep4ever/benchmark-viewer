@@ -188,7 +188,7 @@ void ParserPage::readSettings()
   QSettings settings;
   settings.beginGroup("parser");
 
-  m_dateTimeFormat->setText(settings.value("dateTimeFormat", "yyyy-M-d hh:mm:ss.zzzzzz").toString());
+  m_dateTimeFormat->setText(settings.value("dateTimeFormat", "yyyy-M-d hh:mm:ss.zzz").toString());
   m_tokensSeparator->setText(settings.value("tokensSeparator", ",").toString());
   m_actionStartLabel->setText(settings.value("actionStartLabel", "START").toString());
   m_actionStopLabel->setText(settings.value("actionStopLabel", "STOP").toString());
@@ -197,7 +197,7 @@ void ParserPage::readSettings()
   m_tokenDateTimePosition->setValue(settings.value("tokenDateTimePosition", 0).toInt());
   m_tokenLabelPosition->setValue(settings.value("tokenLabelPosition", 1).toInt());
   m_tokenActionPosition->setValue(settings.value("tokenActionPosition", 2).toInt());
-  m_tokenCommentPosition->setValue(settings.value("tokenCommentPosition", 4).toInt());
+  m_tokenCommentPosition->setValue(settings.value("tokenCommentPosition", 3).toInt());
 
   settings.endGroup();
 }

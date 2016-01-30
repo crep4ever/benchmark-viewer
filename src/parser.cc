@@ -81,12 +81,12 @@ bool CParser::parse(const QString & p_fileName)
   const QString stop = settings.value("actionStopLabel", "STOP").toString();
   const QString step = settings.value("actionStepLabel", "STEP").toString();
   const QString separator = settings.value("tokensSeparator", ",").toString();
-  const QString dateTimeFormat = settings.value("dateTimeFormat", "yyyy-M-d hh:mm:ss.zzzzzz").toString();
+  const QString dateTimeFormat = settings.value("dateTimeFormat", "yyyy-M-d hh:mm:ss.zzz").toString();
 
   const int tokenDateTimePosition = settings.value("tokenDateTimePosition", 0).toInt();
   const int tokenLabelPosition = settings.value("tokenLabelPosition", 1).toInt();
   const int tokenActionPosition = settings.value("tokenActionPosition", 2).toInt();
-  const int tokenCommentPosition = settings.value("tokenCommentPosition", 4).toInt();
+  const int tokenCommentPosition = settings.value("tokenCommentPosition", 3).toInt();
   settings.endGroup();
 
   bool chopMicrosec = false;
