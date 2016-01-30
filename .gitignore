@@ -8,3 +8,5 @@ doc/man
 doc/latex
 todo
 data
+examples/session.csv
+examples/a.out

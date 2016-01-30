@@ -2,7 +2,7 @@
 Visualize benchmark results as a timeline
 
 # Screenshot
-![BenchmarkViewer](http://www.patacrep.com/data/images/benchmark-viewer.png)
+[BenchmarkViewer](doc/img/benchmark-viewer.png)
 
 # Benchmark-viewer
 * required packages: cmake, libqt4-dev
@@ -14,7 +14,19 @@ Visualize benchmark results as a timeline
 >     mkdir build && cd build
 >     cmake -DCMAKE_BUILD_TYPE=Release .. && make
 >     sudo make install
->     ./benchmark-viewer ../data/example.csv
+>     cd -
+>     benchmark-viewer data/example.csv
+
+# Generate benchmark logs
+The directory `examples` contains a minimal program example
+that generates benchmark logs.
+
+>     cd examples
+>     g++ benchmark.cc main.cc
+>     ./a.out # generates benchmark logs in session.csv
+>     benchmark-viewer session.csv
+
+[Example](examples/example.png)
 
 # Contact
 * romain.goffe@gmail.com
