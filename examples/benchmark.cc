@@ -38,52 +38,35 @@ void Benchmark::initSession(const std::string & p_filePath)
 
 Benchmark::Benchmark(const std::string & p_label) : m_label(p_label)
 {
-  if (_file)
-  {
-    char buffer[BENCHMARK_STR_BUFFER_SIZE];
-    sprintf(buffer, "%s%s%s%s%s%s",
-            currentDateTime().c_str(),
-            _separator.c_str(),
-            m_label.c_str(),
-            _separator.c_str(),
-            _startLabel.c_str(),
-            _separator.c_str());
-
-    fprintf(_file, "%s\n", buffer);
-  }
+    writeLine(_startLabel);
 }
 
 Benchmark::~Benchmark()
 {
-  if (_file)
-  {
-    char buffer[BENCHMARK_STR_BUFFER_SIZE];
-    sprintf(buffer, "%s%s%s%s%s%s", currentDateTime().c_str(),
-            _separator.c_str(),
-            m_label.c_str(),
-            _separator.c_str(),
-            _stopLabel.c_str(),
-            _separator.c_str());
-
-    fprintf(_file, "%s\n", buffer);
-  }
+    writeLine(_stopLabel);
 }
 
 void Benchmark::addStep(const std::string & p_comment)
 {
-  if (_file)
-  {
-    char buffer[BENCHMARK_STR_BUFFER_SIZE];
-    sprintf(buffer, "%s%s%s%s%s%s%s", currentDateTime().c_str(),
-            _separator.c_str(),
-            m_label.c_str(),
-            _separator.c_str(),
-            _stepLabel.c_str(),
-            _separator.c_str(),
-            p_comment.c_str());
+    writeLine(_stepLabel, p_comment);
+}
 
-    fprintf(_file, "%s\n", buffer);
-  }
+void Benchmark::writeLine(const std::string & p_action,
+                          const std::string & p_comment)
+{
+    if (_file)
+    {
+        char buffer[BENCHMARK_STR_BUFFER_SIZE];
+        sprintf(buffer, "%s%s%s%s%s%s%s", currentDateTime().c_str(),
+                _separator.c_str(),
+                m_label.c_str(),
+                _separator.c_str(),
+                p_action.c_str(),
+                _separator.c_str(),
+                p_comment.c_str());
+
+        fprintf(_file, "%s\n", buffer);
+    }
 }
 
 const std::string Benchmark::currentDateTime() const

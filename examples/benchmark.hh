@@ -33,6 +33,10 @@ public:
   const std::string currentDateTime() const;
 
 private:
+  void writeLine(const std::string & p_action,
+                 const std::string & p_comment = std::string());
+
+
   static FILE * _file;
   std::string m_label;
   static const std::string _separator;
