@@ -101,9 +101,9 @@ void ConfigDialog::changePage(QListWidgetItem *current, QListWidgetItem *previou
   m_pagesWidget->setCurrentIndex(m_contentsWidget->row(current));
 }
 
-void ConfigDialog::closeEvent(QCloseEvent *event)
+void ConfigDialog::closeEvent(QCloseEvent *p_event)
 {
-  Q_UNUSED(event);
+  Q_UNUSED(p_event);
   for (int i = 0; i < m_pagesWidget->count(); ++i)
   {
     m_pagesWidget->widget(i)->close();
@@ -135,9 +135,9 @@ void Page::readSettings(){}
 
 void Page::writeSettings(){}
 
-void Page::setLayout(QLayout *layout)
+void Page::setLayout(QLayout *p_layout)
 {
-  m_content->setLayout(layout);
+  m_content->setLayout(p_layout);
   setWidget(m_content);
 }
 

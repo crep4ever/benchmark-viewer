@@ -204,8 +204,8 @@ void CParser::computeTreeModel()
 
   for (int level = 0; level < depth; ++level)
   {
-    const QList<CNode *> & nodes = m_levels[level];
-    foreach (CNode *node, nodes)
+    const QList<CNode *> & levelNodes = m_levels[level];
+    foreach (CNode *node, levelNodes)
     {
       const qint64 start = node->startMs();
       const qint64 stop  = node->stopMs();
