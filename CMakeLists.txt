@@ -47,9 +47,8 @@ set(BENCHMARK_VIEWER_RCS
 
 # }}}
 
-find_package(Qt4 COMPONENTS QtCore QtGui REQUIRED)
-
-include(${QT_USE_FILE})
+find_package(Qt5Core)
+find_package(Qt5Widgets)
 
 include_directories(
   ${SOURCE_DIR}
@@ -58,9 +57,9 @@ include_directories(
   )
 
 # process Qt special files
-qt4_wrap_cpp(BENCHMARK_VIEWER_MOCS ${BENCHMARK_VIEWER_QT_HEADER})
-qt4_add_resources(BENCHMARK_VIEWER_RESSOURCES ${BENCHMARK_VIEWER_RCS})
-qt4_wrap_ui(BENCHMARK_VIEWER_UI_HDRS ${BENCHMARK_VIEWER_UIS})
+qt5_wrap_cpp(BENCHMARK_VIEWER_MOCS ${BENCHMARK_VIEWER_QT_HEADER})
+qt5_add_resources(BENCHMARK_VIEWER_RESSOURCES ${BENCHMARK_VIEWER_RCS})
+qt5_wrap_ui(BENCHMARK_VIEWER_UI_HDRS ${BENCHMARK_VIEWER_UIS})
 
 # generating executable
 add_executable(${BENCHMARK_VIEWER_APPLICATION_NAME} WIN32
@@ -75,7 +74,7 @@ if(WIN32)
   set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -Wl,-enable-auto-import")
 endif(WIN32)
 
-list(APPEND LIBRARIES ${QT_LIBRARIES})
+list(APPEND LIBRARIES Qt5::Core Qt5::Widgets)
 
 target_link_libraries(${BENCHMARK_VIEWER_APPLICATION_NAME} ${LIBRARIES})
 

@@ -25,7 +25,6 @@
 #include <QApplication>
 
 #include <QTranslator>
-#include <QTextCodec>
 #include <QDate>
 #include <QLocale>
 #include <QDir>
@@ -84,7 +83,6 @@ int main(int argc, char *argv[])
   QApplication::setOrganizationDomain("vitechnology.com");
   QApplication::setApplicationName(BENCHMARK_VIEWER_APPLICATION_NAME);
   QApplication::setApplicationVersion(BENCHMARK_VIEWER_VERSION);
-  QApplication::setGraphicsSystem("raster");
 
   // Load the application ressources (icons, ...)
   Q_INIT_RESOURCE(benchmark);
@@ -112,7 +110,6 @@ int main(int argc, char *argv[])
   }
 
   // Localization
-  QTextCodec::setCodecForCStrings(QTextCodec::codecForName("UTF-8")) ;
   QDir translationDirectory;
   QString translationFilename = QString("benchmark-viewer_%1.qm").arg(QLocale::system().name().split('_').first());
   QString directory;
