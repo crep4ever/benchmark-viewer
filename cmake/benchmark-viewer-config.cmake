@@ -8,14 +8,10 @@ set(CODENAME "")
 
 #project(${PROJECT_NAME} C)
 
-option(GENERATE_MANPAGES "generate manpages" ON)
-option(COMPRESS_MANPAGES "compress manpages" ON)
-option(ENABLE_OPENMP "multithreading with OpenMP" OFF)
-
 # {{{ CFLAGS
 if (CMAKE_BUILD_TYPE MATCHES "Release")
   message(STATUS "Compiling in Release mode")
-  add_definitions(-O2 -march=native)
+  add_definitions(-O3 -march=native)
 elseif( CMAKE_COMPILER_IS_GNUCXX )
   message(STATUS "Compiling in Debug mode with GCC")
   # Add additional GCC options.
@@ -52,23 +48,6 @@ if(NOT WIN32)
 endif()
 # }}}
 
-
-if(ENABLE_OPENMP)
-  find_package(OpenMP)
-  if(OPENMP_FOUND)
-    message(STATUS "OpenMP support enabled")
-    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${OpenMP_C_FLAGS}")
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${OpenMP_CXX_FLAGS}")
-    set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} ${OpenMP_EXE_LINKER_FLAGS}")
-  else()
-    set(ENABLE_SPELLCHECK false)
-    message(STATUS "OpenMP support disabled (can't find library)")
-  endif()
-else()
-  message(STATUS "OpenMP support disabled")
-endif()
-
-
 # {{{ Find external utilities
 macro(a_find_program var prg req)
   set(required ${req})
@@ -85,31 +64,6 @@ endmacro()
 
 a_find_program(GIT_EXECUTABLE git FALSE)
 a_find_program(HOSTNAME_EXECUTABLE hostname FALSE)
-# programs needed for man pages
-a_find_program(ASCIIDOC_EXECUTABLE asciidoc FALSE)
-a_find_program(XMLTO_EXECUTABLE xmlto FALSE)
-a_find_program(GZIP_EXECUTABLE gzip FALSE)
-# }}}
-
-# {{{ Check if documentation can be build
-if(GENERATE_MANPAGES)
-  if(NOT ASCIIDOC_EXECUTABLE OR NOT XMLTO_EXECUTABLE
-      OR (COMPRESS_MANPAGES AND NOT GZIP_EXECUTABLE)
-      OR NOT EXISTS ${SOURCE_DIR}/manpages/)
-    if(NOT ASCIIDOC_EXECUTABLE)
-      SET(missing "asciidoc")
-    endif()
-    if(NOT XMLTO_EXECUTABLE)
-      SET(missing ${missing} " xmlto")
-    endif()
-    if(COMPRESS_MANPAGES AND NOT GZIP_EXECUTABLE)
-      SET(missing ${missing} " gzip")
-    endif()
-
-    message(STATUS "Not generating manpages. Missing: " ${missing})
-    set(GENERATE_MANPAGES OFF)
-  endif()
-endif()
 # }}}
 
 # {{{ Version stamp
@@ -138,13 +92,6 @@ if(DEFINED PREFIX)
   set(CMAKE_INSTALL_PREFIX ${PREFIX})
 else()
   set(PREFIX ${CMAKE_INSTALL_PREFIX} CACHE PATH "install prefix")
-endif()
-
-# set man path
-if(DEFINED BENCHMARK_VIEWER_MAN_PATH)
-  set(BENCHMARK_VIEWER_MAN_PATH ${BENCHMARK_VIEWER_MAN_PATH} CACHE PATH "benchmark-viewer manpage directory")
-else()
-  set(BENCHMARK_VIEWER_MAN_PATH ${PREFIX}/share/man CACHE PATH "benchmark-viewer manpage directory")
 endif()
 
 # Hide to avoid confusion

@@ -98,93 +98,9 @@ add_custom_target(
 #qt4_create_translation(COMPILED_TRANSLATIONS ${BENCHMARK_VIEWER_SOURCES} ${TRANSLATIONS} )
 # }}}
 
-# {{{ Manpages
-if(GENERATE_MANPAGES)
-
-  set(BENCHMARK_VIEWER_MAN_SRCS
-    ${SOURCE_DIR}/manpages/benchmark-viewer.1.txt
-    )
-
-  set(BENCHMARK_VIEWER_MAN_LANGS default fr)
-
-  foreach(lang ${BENCHMARK_VIEWER_MAN_LANGS})
-
-    foreach(txtfile ${BENCHMARK_VIEWER_MAN_SRCS})
-      # figure the base name of the file (ie "benchmark-viewer.1")
-      GET_FILENAME_COMPONENT(tmpname ${txtfile} NAME)
-      string(REGEX REPLACE ".txt\$" "" basename ${tmpname})
-
-      # figure the relative path of the file
-      GET_FILENAME_COMPONENT(tmppath ${txtfile} PATH)
-      string(REPLACE ${SOURCE_DIR}/ "" relpath ${tmppath})
-
-      # figure the manpage section to install to from filename
-      string(REGEX REPLACE "^.*\\.([0-9])$" "\\1" section ${basename})
-
-      # construct the language specific versions of the basename and path
-      if (lang STREQUAL default)
-        set(basename2 ${basename})
-        set(relpath2 ${relpath}/man${section})
-      else()
-        set(basename2 ${basename}.${lang})
-        set(relpath2 ${relpath}/${lang}/man${section})
-      endif()
-
-      # create the build directory (if it does not exist)
-      file(MAKE_DIRECTORY ${BUILD_DIR}/${relpath2})
-
-      # set the final filenames
-      set(txtfile ${SOURCE_DIR}/${relpath}/${basename2}.txt)
-      set(xmlfile ${BUILD_DIR}/${relpath2}/${basename}.xml)
-      set(gzfile  ${BUILD_DIR}/${relpath2}/${basename}.gz)
-      set(manfile ${BUILD_DIR}/${relpath2}/${basename})
-
-      add_custom_command(
-        COMMAND ${ASCIIDOC_EXECUTABLE} -d manpage -b docbook -o ${xmlfile} - < ${txtfile}
-        WORKING_DIRECTORY ${BUILD_DIR}/${relpath2}
-        OUTPUT  ${xmlfile}
-        DEPENDS ${txtfile}
-        VERBATIM)
-      add_custom_command(
-        COMMAND ${XMLTO_EXECUTABLE} --skip-validation man ${xmlfile}
-        OUTPUT  ${manfile}
-        WORKING_DIRECTORY ${BUILD_DIR}/${relpath2}
-        DEPENDS ${xmlfile})
-
-      if(COMPRESS_MANPAGES)
-        add_custom_command(
-          COMMAND ${GZIP_EXECUTABLE} < ${manfile} > ${gzfile}
-          OUTPUT  ${gzfile}
-          WORKING_DIRECTORY ${BUILD_DIR}/${relpath2}
-          DEPENDS ${manfile}
-          VERBATIM)
-
-        set(MAN_FILES ${MAN_FILES} ${gzfile})
-      else()
-        set(MAN_FILES ${MAN_FILES} ${manfile})
-      endif()
-    endforeach()
-
-  endforeach()
-
-  add_custom_target(man ALL DEPENDS ${MAN_FILES})
-endif()
-# }}}
-
 # {{{ Installation
 install(TARGETS ${BENCHMARK_VIEWER_APPLICATION_NAME} RUNTIME DESTINATION bin)
-if(GENERATE_MANPAGES)
-  if(COMPRESS_MANPAGES)
-    set(regex "\\.(xml|txt|[0-9])$")
-  else()
-    set(regex "\\.(xml|txt|gz)$")
-  endif()
-  install(DIRECTORY ${BUILD_DIR}/${relpath}/ DESTINATION ${BENCHMARK_VIEWER_MAN_PATH}
-    REGEX ${regex} EXCLUDE)
-endif()
 install(FILES ${BENCHMARK_VIEWER_APPLICATION_NAME}.desktop DESTINATION share/applications)
 install(FILES icons/benchmark-viewer/src/benchmark-viewer.svg DESTINATION share/icons)
 install(FILES ${COMPILED_TRANSLATIONS} DESTINATION ${BENCHMARK_VIEWER_DATA_PATH}/lang)
-install(FILES ${BENCHMARK_VIEWER_PROFILES} DESTINATION ${BENCHMARK_VIEWER_DATA_PATH}/profiles)
-install(FILES ${BENCHMARK_VIEWER_SHADERS} DESTINATION ${BENCHMARK_VIEWER_DATA_PATH}/shaders)
 # }}}
