@@ -3,6 +3,7 @@
 Display C++ applications runtime as a timeline
 
 [![Build Status](https://travis-ci.org/crep4ever/benchmark-viewer.svg?branch=master)](https://travis-ci.org/crep4ever/benchmark-viewer)
+[![Coverity Scan Build Status](https://scan.coverity.com/projects/crep4ever-benchmark-viewer)](https://img.shields.io/coverity/scan/9003.svg)
 
 ![BenchmarkViewer](doc/img/benchmark-viewer.png)
 
