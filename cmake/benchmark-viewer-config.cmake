@@ -6,26 +6,28 @@ set(VERSION devel)
 
 set(CODENAME "")
 
-#project(${PROJECT_NAME} C)
+#-------------------------------------------------------------------------------
+# Compiler options
+#-------------------------------------------------------------------------------
 
-# {{{ CFLAGS
+# Default build type
+if (NOT DEFINED CMAKE_BUILD_TYPE)
+  set (CMAKE_BUILD_TYPE Release)
+endif ()
+
+# Compiler flags
 if (CMAKE_BUILD_TYPE MATCHES "Release")
-  message(STATUS "Compiling in Release mode")
-  add_definitions(-O3 -march=native)
-elseif( CMAKE_COMPILER_IS_GNUCXX )
-  message(STATUS "Compiling in Debug mode with GCC")
-  # Add additional GCC options.
-  add_definitions(
-    -g -O -Wall -pedantic
+  set(FLAGS -Ofast -march=native -flto)
+elseif (CMAKE_BUILD_TYPE MATCHES "Debug")
+  set(FLAGS -g -O -Wall -pedantic -Werror
     -pedantic-errors -Wextra -Wcast-align
-    -Wcast-qual -Wchar-subscripts -Wcomment
+    -Wchar-subscripts -Wcomment
     -Wdisabled-optimization
-    -Werror -Wformat -Wformat=2
+    -Wformat -Wformat=2
     -Wformat-nonliteral -Wformat-security
     -Wformat-y2k
-    -Wimport  -Winit-self -Winline
-    -Winvalid-pch
-    -Wunsafe-loop-optimizations -Wlong-long -Wmissing-braces
+    -Wimport  -Winit-self
+    -Winvalid-pch -Wlong-long -Wmissing-braces
     -Wmissing-field-initializers -Wmissing-format-attribute
     -Wmissing-include-dirs -Wmissing-noreturn
     -Wpacked  -Wparentheses  -Wpointer-arith
@@ -33,20 +35,21 @@ elseif( CMAKE_COMPILER_IS_GNUCXX )
     -Wsequence-point  -Wshadow -Wsign-compare  -Wstack-protector
     -Wstrict-aliasing -Wstrict-aliasing=2 -Wswitch
     -Wswitch-enum -Wtrigraphs  -Wuninitialized
-    -Wunknown-pragmas -Wunreachable-code -Wunused
+    -Wunreachable-code -Wunused
     -Wunused-function -Wunused-label -Wunused-parameter
     -Wunused-value -Wunused-variable -Wvariadic-macros
     -Wvolatile-register-var  -Wwrite-strings
     )
-elseif( CMAKE_CXX_COMPILER MATCHES "clang" )
-  message(STATUS "Compiling in Debug mode with Clang")
-  add_definitions( -Wall -Wextra )
+endif ()
+
+if (CMAKE_CXX_COMPILER MATCHES "clang")
 endif()
 
-if(NOT WIN32)
-  add_definitions( -fvisibility=hidden )
-endif()
-# }}}
+add_definitions(${FLAGS})
+message (STATUS "Using ${CMAKE_CXX_COMPILER} compiler")
+message (STATUS "Compile in ${CMAKE_BUILD_TYPE} configuration")
+message (STATUS "Compile options: ${FLAGS}")
+
 
 # {{{ Find external utilities
 macro(a_find_program var prg req)
