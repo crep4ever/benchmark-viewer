@@ -121,7 +121,7 @@ int CScene::depth() const
   int d = 0;
   foreach (CNode *node, m_nodes)
   {
-    d = qMax(node->level(), depth);
+    d = qMax(node->level(), d);
   }
   return d;
 }
