@@ -28,3 +28,17 @@ notifications:
       - romain.goffe@gmail.com
     on_success: change
     on_failure: always
+
+env:
+  global:
+   - secure: "OfnmYDATsXTkWeLIxjV3+SgjATai7PYT5idyJY8kDti4mPJZ+bu38oo7KhPRn6MbzNswLv1C82iplw3cDDY3ONh2NScp+rJ3VAGTTxnDi5o+tu4Og1nGeIsrhuWSdy6jc7cuhmtGvcvFPurC6GBlT2BrNWzSSyeL52gNo+T+BzaLyni+6VR3+dsF9B7diA0mDSAH8oK1ECuCzKF4SxLk0Pf7wxTi2pn0Rjzp9m3jOMnbZZhq16pVUfp+nMI1c8Rsf0jAuTEIdRB70ZG3yqvLXAC319aLoUkORqJ+nc0Abdk/uSSGM9vDiBMUSwEEh1tYGC36tBHZcESy/RWb6RqkGuD82NDKf4nl5hJ7X57XmDGGpC0e64lwPUTzm3pEYxaOJajr79tg9gBE1D0VLVN3bbPDguNCL6G2i6AOqeIgLsM/qAufE/z66K8k8lcg1Tk2fLflCEi01b00pfVf+BQhuK78x9kvZpV1OMhJXiwWY36C7PxWXuot7wDjzWzTkWEu2GHy4Qaqmj/f3xVJXN3JaFUwzs4lp4qr5xs5LY/uCct+3PwUJpJIynhMfKEWXJW2ABGMi4h0N+eLPBmmfEMHOGz15570VqS28tI9vpLOlNaHEGUy+NTSm+J8lxELkKmSP8nPkE86FWUbhaU/irolAIeobqIfudSfrutAB1ktw+o="
+
+addons:
+  coverity_scan:
+    project:
+      name: "crep4ever/benchmark-viewer"
+      description: "Build submitted via Travis CI"
+    notification_email: romain.goffe@gmail.com
+    build_command_prepend: "mkdir build; cd build; cmake -DCMAKE_BUILD_TYPE=Debug .."
+    build_command:   "make"
+    branch_pattern: master
