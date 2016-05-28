@@ -81,16 +81,16 @@ QDateTime CScene::first() const
     return QDateTime();
   }
 
-  QDateTime first = m_nodes[0]->start();
+  QDateTime date = m_nodes[0]->start();
   foreach (CNode *node, m_nodes)
   {
-    if (node->start() < first)
+    if (node->start() < date)
     {
-      first = node->start();
+      date = node->start();
     }
   }
 
-  return first;
+  return date;
 }
 
 QDateTime CScene::last() const
@@ -100,15 +100,15 @@ QDateTime CScene::last() const
     return QDateTime();
   }
 
-  QDateTime last = m_nodes[0]->stop();
+  QDateTime date = m_nodes[0]->stop();
   foreach (CNode *node, m_nodes)
   {
-    if (node->stop() > last)
+    if (node->stop() > date)
     {
-      last = node->stop();
+      date = node->stop();
     }
   }
-  return last;
+  return date;
 }
 
 qint64 CScene::duration() const
@@ -118,10 +118,10 @@ qint64 CScene::duration() const
 
 int CScene::depth() const
 {
-  int depth = 0;
+  int d = 0;
   foreach (CNode *node, m_nodes)
   {
-    depth = qMax(node->level(), depth);
+    d = qMax(node->level(), depth);
   }
-  return depth;
+  return d;
 }
