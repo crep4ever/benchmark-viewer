@@ -77,7 +77,7 @@ void CInfoWidget::setNode(CNode *p_node)
 {
   m_node = p_node;
   m_nodeInfo->setNode(p_node);
-  m_nodeInfo->setVisible(m_nodeInfo);
+  m_nodeInfo->setVisible(p_node);
   update();
 }
 
