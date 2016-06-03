@@ -39,6 +39,6 @@ addons:
       name: "crep4ever/benchmark-viewer"
       description: "Build submitted via Travis CI"
     notification_email: romain.goffe@gmail.com
-    build_command_prepend: "mkdir build; cd build; cmake -DCMAKE_BUILD_TYPE=Debug .."
-    build_command:   "make"
+    build_command_prepend: mkdir build; cd build; cmake -DCMAKE_BUILD_TYPE=Debug ..
+    build_command: make
     branch_pattern: master
