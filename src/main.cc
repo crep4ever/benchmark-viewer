@@ -35,13 +35,6 @@
 #include "config.hh"
 #include "main-window.hh"
 
-bool isFilenameSupported(const QString & filename)
-{
-  return (filename.contains(".xml") ||
-          filename.contains(".csv") ||
-          filename.contains(".txt"));
-}
-
 void printUsage()
 {
   QTextStream out(stdout);
@@ -133,7 +126,7 @@ int main(int argc, char *argv[])
 
   foreach (const QString & arg, arguments)
   {
-    if (QFile(arg).exists() && isFilenameSupported(arg))
+    if (QFile(arg).exists() && CMainWindow::isFilenameSupported(arg))
     {
       mainWindow.open(arg);
     }

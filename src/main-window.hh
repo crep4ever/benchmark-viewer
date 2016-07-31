@@ -25,6 +25,7 @@
 class QTabWidget;
 class QToolBar;
 class QSplitter;
+class QDropEvent;
 
 class CScene;
 class CTimeLineView;
@@ -52,11 +53,21 @@ public:
 
   void clear();
 
+  /*!
+  Return \a true if \a p_filename ends with a supported extensions,
+  \a false otherwise.
+  */
+  static bool isFilenameSupported(const QString & p_filename);
+
 protected:
   /*!
     Saves settings before closing the application.
   */
   void closeEvent(QCloseEvent *p_event);
+
+  void dropEvent(QDropEvent *p_event);
+
+  void dragEnterEvent(QDragEnterEvent *p_event);
 
 public slots:
   void open(const QString & p_filename);
