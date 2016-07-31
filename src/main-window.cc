@@ -20,6 +20,8 @@
 #include <QApplication>
 #include <QAction>
 #include <QCloseEvent>
+#include <QDropEvent>
+#include <QMimeData>
 #include <QDesktopServices>
 #include <QMenu>
 #include <QMenuBar>
@@ -62,6 +64,7 @@ CMainWindow::CMainWindow(QWidget *p_parent) : QMainWindow(p_parent)
 {
   setWindowTitle("Benchmark viewer");
   setWindowIcon(QIcon(":/icons/benchmark-viewer/src/benchmark-viewer.svg"));
+  setAcceptDrops(true);
 
   createActions();
   createMenus();
@@ -107,6 +110,14 @@ void CMainWindow::writeSettings()
   }
   settings.setValue( "openPath", m_openPath );
   settings.endGroup();
+}
+
+
+bool CMainWindow::isFilenameSupported(const QString & p_filename)
+{
+  return (p_filename.contains(".xml") ||
+          p_filename.contains(".csv") ||
+          p_filename.contains(".txt"));
 }
 
 void CMainWindow::createActions()
@@ -165,6 +176,24 @@ void CMainWindow::createActions()
 void CMainWindow::closeEvent(QCloseEvent *p_event)
 {
   writeSettings();
+  p_event->accept();
+}
+
+void CMainWindow::dropEvent(QDropEvent *p_event)
+{
+  QList<QUrl> urls = p_event->mimeData()->urls();
+  foreach (QUrl url, urls)
+  {
+    const QString path = url.toLocalFile();
+    if (QFile(path).exists() && isFilenameSupported(path))
+    {
+      open(path);
+    }
+  }
+}
+
+void CMainWindow::dragEnterEvent(QDragEnterEvent *p_event)
+{
   p_event->accept();
 }
 
