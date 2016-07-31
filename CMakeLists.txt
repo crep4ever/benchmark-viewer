@@ -43,6 +43,7 @@ set(BENCHMARK_VIEWER_QT_HEADER
 set(BENCHMARK_VIEWER_RCS
   icons/benchmark-viewer/benchmark.qrc
   icons/tango/tango.qrc
+  benchmark.rc
   )
 
 # }}}
