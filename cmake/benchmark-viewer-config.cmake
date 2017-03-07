@@ -32,7 +32,7 @@ elseif (CMAKE_BUILD_TYPE MATCHES "Debug")
     -Wmissing-include-dirs -Wmissing-noreturn
     -Wpacked  -Wparentheses  -Wpointer-arith
     -Wredundant-decls -Wreturn-type
-    -Wsequence-point  -Wshadow -Wsign-compare  -Wstack-protector
+    -Wsequence-point  -Wsign-compare  -Wstack-protector
     -Wstrict-aliasing -Wstrict-aliasing=2 -Wswitch
     -Wswitch-enum -Wtrigraphs  -Wuninitialized
     -Wunreachable-code -Wunused
