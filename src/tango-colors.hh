@@ -64,7 +64,7 @@ static QColor _TangoAluminium4(QColor(136, 138, 133));
 static QColor _TangoAluminium5(QColor(85, 87, 83));
 static QColor _TangoAluminium6(QColor(46, 52, 54));
 
-static inline QColor pickColor(int i)
+static inline QColor pickColor(uint i)
 {
   const int id = i % 24;
   switch (id)

@@ -186,9 +186,9 @@ void CTimeLineView::resizeEvent(QResizeEvent *p_event)
 
 void CTimeLineView::updateLabelsVisibility()
 {
-  const QList<QGraphicsItem*> & items = QGraphicsView::items();
+  const QList<QGraphicsItem*> & allItems = QGraphicsView::items();
 
-  foreach (QGraphicsItem *item, items)
+  foreach (QGraphicsItem *item, allItems)
   {
     QGraphicsSimpleTextItem *t = dynamic_cast<QGraphicsSimpleTextItem*>(item);
     if (t && t->parentItem())
@@ -210,17 +210,17 @@ COverlayWidget* CTimeLineView::sessionInfo() const
 
 void CTimeLineView::updateOverlaysPositions()
 {
-  int x = 0;
-  int y = geometry().height() - m_firstSelection->geometry().height() - 15;
-  m_firstSelection->move(x, y);
+  int posx = 0;
+  int posy = geometry().height() - m_firstSelection->geometry().height() - 15;
+  m_firstSelection->move(posx, posy);
 
-  x = geometry().width()  - m_secondSelection->geometry().width();
-  y = geometry().height() - m_secondSelection->geometry().height() - 15;
-  m_secondSelection->move(x, y);
+  posx = geometry().width()  - m_secondSelection->geometry().width();
+  posy = geometry().height() - m_secondSelection->geometry().height() - 15;
+  m_secondSelection->move(posx, posy);
 
-  x = geometry().width()  / 2 - m_diffInfo->geometry().width() / 2;
-  y = geometry().height() - m_diffInfo->geometry().height() - 15;
-  m_diffInfo->move(x, y);
+  posx = geometry().width()  / 2 - m_diffInfo->geometry().width() / 2;
+  posy = geometry().height() - m_diffInfo->geometry().height() - 15;
+  m_diffInfo->move(posx, posy);
 }
 
 void CTimeLineView::updateDiffInfo()

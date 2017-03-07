@@ -25,7 +25,6 @@
 #include <QApplication>
 
 #include <QTranslator>
-#include <QTextCodec>
 #include <QDate>
 #include <QLocale>
 #include <QDir>
@@ -35,13 +34,6 @@
 
 #include "config.hh"
 #include "main-window.hh"
-
-bool isFilenameSupported(const QString & filename)
-{
-  return (filename.contains(".xml") ||
-          filename.contains(".csv") ||
-          filename.contains(".txt"));
-}
 
 void printUsage()
 {
@@ -84,7 +76,6 @@ int main(int argc, char *argv[])
   QApplication::setOrganizationDomain("vitechnology.com");
   QApplication::setApplicationName(BENCHMARK_VIEWER_APPLICATION_NAME);
   QApplication::setApplicationVersion(BENCHMARK_VIEWER_VERSION);
-  QApplication::setGraphicsSystem("raster");
 
   // Load the application ressources (icons, ...)
   Q_INIT_RESOURCE(benchmark);
@@ -112,7 +103,6 @@ int main(int argc, char *argv[])
   }
 
   // Localization
-  QTextCodec::setCodecForCStrings(QTextCodec::codecForName("UTF-8")) ;
   QDir translationDirectory;
   QString translationFilename = QString("benchmark-viewer_%1.qm").arg(QLocale::system().name().split('_').first());
   QString directory;
@@ -136,7 +126,7 @@ int main(int argc, char *argv[])
 
   foreach (const QString & arg, arguments)
   {
-    if (QFile(arg).exists() && isFilenameSupported(arg))
+    if (QFile(arg).exists() && CMainWindow::isFilenameSupported(arg))
     {
       mainWindow.open(arg);
     }

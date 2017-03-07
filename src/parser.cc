@@ -52,7 +52,7 @@ int CParser::computeMaxTokenPosition() const
   const int tokenDateTimePosition = settings.value("tokenDateTimePosition", 0).toInt();
   const int tokenLabelPosition = settings.value("tokenLabelPosition", 1).toInt();
   const int tokenActionPosition = settings.value("tokenActionPosition", 2).toInt();
-  const int tokenCommentPosition = settings.value("tokenCommentPosition", 4).toInt();
+  const int tokenCommentPosition = settings.value("tokenCommentPosition", 3).toInt();
   settings.endGroup();
 
   int max = 0;
@@ -204,8 +204,8 @@ void CParser::computeTreeModel()
 
   for (int level = 0; level < depth; ++level)
   {
-    const QList<CNode *> & nodes = m_levels[level];
-    foreach (CNode *node, nodes)
+    const QList<CNode *> & levelNodes = m_levels[level];
+    foreach (CNode *node, levelNodes)
     {
       const qint64 start = node->startMs();
       const qint64 stop  = node->stopMs();

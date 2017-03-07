@@ -61,7 +61,7 @@ CInfoWidget::CInfoWidget(QWidget *p_parent) : QWidget(p_parent)
   m_childrenInfo->setColumnCount(4);
   m_childrenInfo->setWordWrap(true);
   m_childrenInfo->setHorizontalHeaderLabels(header);
-  m_childrenInfo->horizontalHeader()->setResizeMode(0, QHeaderView::Stretch);
+  //m_childrenInfo->horizontalHeader()->setResizeMode(0, QHeaderView::Stretch);
   m_childrenInfo->verticalHeader()->setVisible(false);
   m_childrenInfo->setShowGrid(false);
   m_childrenInfo->setVisible(false);
@@ -83,7 +83,7 @@ void CInfoWidget::setNode(CNode *p_node)
 {
   m_node = p_node;
   m_nodeInfo->setNode(p_node);
-  m_nodeInfo->setVisible(m_nodeInfo);
+  m_nodeInfo->setVisible(p_node);
   update();
 }
 
