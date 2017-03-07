@@ -22,6 +22,7 @@
 #include <QTableWidgetItem>
 #include <QHeaderView>
 #include <QtGlobal>
+#include <QScrollArea>
 #include <QDebug>
 
 #include "node.hh"
@@ -39,7 +40,12 @@ CInfoWidget::CInfoWidget(QWidget *p_parent) : QWidget(p_parent)
   m_nodeInfo->setOpacity(1);
   m_nodeInfo->setDisplaySteps(true);
   m_nodeInfo->setVisible(false);
-  m_mainLayout->addWidget(m_nodeInfo);
+
+  QScrollArea *scrollArea = new QScrollArea;
+  scrollArea->setBackgroundRole(QPalette::Dark);
+  scrollArea->setWidget(m_nodeInfo);
+
+  m_mainLayout->addWidget(scrollArea);
 
   QStringList header;
   header << tr("Child");
