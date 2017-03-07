@@ -35,7 +35,7 @@ CNodeInfo::~CNodeInfo()
 
 QSize CNodeInfo::sizeHint() const
 {
-  return QSize(250, 55);
+  return m_displaySteps ? QSize(250, 140) : QSize(250, 55);
 }
 
 CNode * CNodeInfo::node() const

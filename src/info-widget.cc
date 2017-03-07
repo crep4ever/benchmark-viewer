@@ -44,7 +44,7 @@ CInfoWidget::CInfoWidget(QWidget *p_parent) : QWidget(p_parent)
   QScrollArea *scrollArea = new QScrollArea;
   scrollArea->setBackgroundRole(QPalette::Dark);
   scrollArea->setWidget(m_nodeInfo);
-
+  scrollArea->setWidgetResizable(true);
   m_mainLayout->addWidget(scrollArea);
 
   QStringList header;
@@ -61,7 +61,6 @@ CInfoWidget::CInfoWidget(QWidget *p_parent) : QWidget(p_parent)
   m_childrenInfo->setColumnCount(4);
   m_childrenInfo->setWordWrap(true);
   m_childrenInfo->setHorizontalHeaderLabels(header);
-  //m_childrenInfo->horizontalHeader()->setResizeMode(0, QHeaderView::Stretch);
   m_childrenInfo->verticalHeader()->setVisible(false);
   m_childrenInfo->setShowGrid(false);
   m_childrenInfo->setVisible(false);
