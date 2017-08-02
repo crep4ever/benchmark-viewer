@@ -323,7 +323,7 @@ void CMainWindow::open(const QString & filename)
 
 void CMainWindow::open()
 {
-  QStringList filenames = QFileDialog::getOpenFileNames(this,
+  QStringList filenames = QFileDialog::getOpenFileNames(0,
                                                         tr("Open data file"),
                                                         m_openPath,
                                                         tr("Text files (*.txt *.csv)"));
