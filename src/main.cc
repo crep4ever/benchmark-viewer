@@ -74,8 +74,8 @@ int main(int argc, char *argv[])
 
   QApplication::setOrganizationName("ViTechnology");
   QApplication::setOrganizationDomain("vitechnology.com");
-  QApplication::setApplicationName(BENCHMARK_VIEWER_APPLICATION_NAME);
-  QApplication::setApplicationVersion(BENCHMARK_VIEWER_VERSION);
+  QApplication::setApplicationName(PROJECT_APPLICATION_NAME);
+  QApplication::setApplicationVersion(PROJECT_VERSION);
 
   // Load the application ressources (icons, ...)
   Q_INIT_RESOURCE(benchmark);
@@ -107,7 +107,7 @@ int main(int argc, char *argv[])
   QString translationFilename = QString("benchmark-viewer_%1.qm").arg(QLocale::system().name().split('_').first());
   QString directory;
 
-  translationDirectory = QDir(BENCHMARK_VIEWER_DATA_PATH);
+  translationDirectory = QDir(PROJECT_DATA_PATH);
   if (translationDirectory.exists())
   {
     directory = translationDirectory.absoluteFilePath("lang");

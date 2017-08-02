@@ -1,20 +1,9 @@
-cmake_minimum_required(VERSION 2.8)
-set(CMAKE_COLOR_MAKEFILE ON)
-#set(CMAKE_VERBOSE_MAKEFILE OFF)
+cmake_minimum_required(VERSION 2.8.11)
 
-set(SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR})
-set(BUILD_DIR ${CMAKE_CURRENT_BINARY_DIR})
+project(benchmark-viewer)
 
-set(CMAKE_MODULE_PATH "${SOURCE_DIR}/cmake/")
-
-if(NOT EXISTS ${CMAKE_MODULE_PATH}/benchmark-viewer-config.cmake)
-  message(FATAL_ERROR "Cannot find: ${CMAKE_MODULE_PATH}/benchmark-viewer-config.cmake")
-endif()
-
-include(${CMAKE_MODULE_PATH}/benchmark-viewer-config.cmake)
-
-# {{{ Sources
-set(BENCHMARK_VIEWER_SOURCES
+# sources
+set(PROJECT_SOURCES
   src/main.cc
   src/main-window.cc
   src/preferences.cc
@@ -26,82 +15,76 @@ set(BENCHMARK_VIEWER_SOURCES
   src/graphics-node-item.cc
   src/node-info-widget.cc
   src/info-widget.cc
-  )
+)
 
-# header (moc)
-set(BENCHMARK_VIEWER_QT_HEADER
-  src/main-window.hh
-  src/preferences.hh
-  src/scene.hh
-  src/timeline-view.hh
-  src/overlay-widget.hh
-  src/node-info-widget.hh
-  src/info-widget.hh
-  )
-
-# resources (rcs)
-set(BENCHMARK_VIEWER_RCS
+# resources
+set(PROJECT_RCS
   icons/benchmark-viewer/benchmark.qrc
   icons/tango/tango.qrc
   benchmark.rc
-  )
-
-# }}}
-
-find_package(Qt5Core)
-find_package(Qt5Widgets)
-
-include_directories(
-  ${SOURCE_DIR}
-  ${SOURCE_DIR}/src/
-  ${BUILD_DIR}
-  )
-
-# process Qt special files
-qt5_wrap_cpp(BENCHMARK_VIEWER_MOCS ${BENCHMARK_VIEWER_QT_HEADER})
-qt5_add_resources(BENCHMARK_VIEWER_RESSOURCES ${BENCHMARK_VIEWER_RCS})
-qt5_wrap_ui(BENCHMARK_VIEWER_UI_HDRS ${BENCHMARK_VIEWER_UIS})
-
-# generating executable
-add_executable(${BENCHMARK_VIEWER_APPLICATION_NAME} WIN32
-  ${BENCHMARK_VIEWER_SOURCES}
-  ${BENCHMARK_VIEWER_MOCS}
-  ${BENCHMARK_VIEWER_RESSOURCES}
-  ${COMPILED_TRANSLATIONS}
-  ${BENCHMARK_VIEWER_UI_HDRS}
-  )
-
-if(WIN32)
-  set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -Wl,-enable-auto-import")
-endif(WIN32)
-
-list(APPEND LIBRARIES Qt5::Core Qt5::Widgets)
-
-target_link_libraries(${BENCHMARK_VIEWER_APPLICATION_NAME} ${LIBRARIES})
-
-# {{{ Internationalization
-set (TRANSLATIONS
-#lang/benchmark-viewer_fr.ts
 )
 
-set (COMPILED_TRANSLATIONS
-#lang/benchmark-viewer_fr.qm
+# Additional CMake modules
+set(CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake ${CMAKE_MODULE_PATH})
+
+# Version information
+include(GetGitRevisionDescription)
+git_describe(VERSION --tags)
+
+string(REGEX REPLACE "^([0-9]+)\\..*" "\\1" VERSION_MAJOR "${VERSION}")
+string(REGEX REPLACE "^[0-9]+\\.([0-9]+).*" "\\1" VERSION_MINOR "${VERSION}")
+string(REGEX REPLACE "^[0-9]+\\.[0-9]+\\.([0-9]+).*" "\\1" VERSION_PATCH "${VERSION}")
+string(REGEX REPLACE "^[0-9]+\\.[0-9]+\\.[0-9]+(.*)" "\\1" VERSION_SHA1 "${VERSION}")
+set(VERSION_SHORT "${VERSION_MAJOR}.${VERSION_MINOR}.${VERSION_PATCH}")
+message(STATUS "Git version ${VERSION_SHORT}")
+
+# Configure a header file to pass some of the CMake settings to the source code
+set(PROJECT_APPLICATION_NAME ${PROJECT_NAME})
+set(PROJECT_VERSION          ${VERSION})
+set(PROJECT_COMPILE_MACHINE  ${CMAKE_SYSTEM_PROCESSOR})
+set(PROJECT_COMPILE_HOSTNAME ${BUILDHOSTNAME})
+set(PROJECT_COMPILE_BY       $ENV{USER})
+set(PROJECT_DATA_PATH        ${PREFIX}/share/${MATRIX_VIEWER_APPLICATION_NAME})
+
+configure_file(
+  "${PROJECT_SOURCE_DIR}/config.hh.in"
+  "${PROJECT_BINARY_DIR}/config.hh"
 )
 
-add_custom_target(
-  translations_target
-  COMMAND "${QT_LRELEASE_EXECUTABLE}" ${TRANSLATIONS}
-  DEPENDS ${TRANSLATIONS}
-  COMMENT "Updating translations"
-  WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR})
-#uncomment and run `make translations_target` to update translations ts files from sources
-#warning, if uncommented, running make clean will remove ts files
-#qt4_create_translation(COMPILED_TRANSLATIONS ${BENCHMARK_VIEWER_SOURCES} ${TRANSLATIONS} )
-# }}}
+# Find includes in corresponding build directories
+set(CMAKE_INCLUDE_CURRENT_DIR ON)
+set(CMAKE_INCLUDE_BINARY_DIR ON)
 
-# {{{ Installation
-install(TARGETS ${BENCHMARK_VIEWER_APPLICATION_NAME} RUNTIME DESTINATION bin)
-install(FILES ${BENCHMARK_VIEWER_APPLICATION_NAME}.desktop DESTINATION share/applications)
-install(FILES icons/benchmark-viewer/src/benchmark-viewer.svg DESTINATION share/icons)
-install(FILES ${COMPILED_TRANSLATIONS} DESTINATION ${BENCHMARK_VIEWER_DATA_PATH}/lang)
-# }}}
+# Instruct CMake to run moc/rcc automatically when needed.
+set(CMAKE_AUTOMOC ON)
+set(CMAKE_AUTORCC ON)
+
+# Find external dependencies
+find_package(Qt5Widgets REQUIRED)
+
+list(APPEND LIBRARIES Qt5::Widgets)
+
+# Compiler flags
+if (NOT CMAKE_BUILD_TYPE)
+  set (CMAKE_BUILD_TYPE "Release")
+endif ()
+
+if (CMAKE_BUILD_TYPE MATCHES "Release")
+  set(FLAGS -Ofast -march=native -DNDEBUG)
+elseif (CMAKE_BUILD_TYPE MATCHES "Debug")
+  set(FLAGS -g -Werror -Wall -Wextra -Wshadow -Wnon-virtual-dtor -pedantic)
+endif ()
+
+message (STATUS "Using ${CMAKE_CXX_COMPILER} compiler")
+message (STATUS "Compile in ${CMAKE_BUILD_TYPE} configuration")
+message (STATUS "Compile options: ${FLAGS}")
+
+# Build the main executable
+add_executable(${PROJECT_NAME} WIN32 ${PROJECT_SOURCES} ${PROJECT_RCS})
+target_compile_options(${PROJECT_NAME} PRIVATE ${FLAGS})
+target_link_libraries(${PROJECT_NAME} ${LIBRARIES})
+
+# Installation
+install(FILES ${PROJECT_NAME}.desktop DESTINATION share/applications)
+install(FILES icons/benchmark-viewer/256x256/benchmark-viewer.png DESTINATION share/icons)
+install(FILES ${PROJECT_PROFILES} DESTINATION ${PROJECT_DATA_PATH}/profiles)
