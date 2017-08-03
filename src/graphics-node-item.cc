@@ -23,7 +23,7 @@
 #include "node.hh"
 
 CGraphicsNodeItem::CGraphicsNodeItem() : QGraphicsRectItem()
-, m_node(0)
+, m_node(nullptr)
 {
 }
 

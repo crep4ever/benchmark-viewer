@@ -30,7 +30,7 @@ class CNodeInfo : public COverlayWidget
 
 public:
   /// Constructor.
-  CNodeInfo(QWidget *p_parent = 0);
+  CNodeInfo(QWidget *p_parent = nullptr);
 
   /// Destructor.
   virtual ~CNodeInfo();

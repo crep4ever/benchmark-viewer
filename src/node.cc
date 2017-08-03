@@ -65,7 +65,7 @@ m_stopMs(0),
 m_duration(0),
 m_steps(),
 m_level(0),
-m_parent(0),
+m_parent(nullptr),
 m_children()
 {
 }

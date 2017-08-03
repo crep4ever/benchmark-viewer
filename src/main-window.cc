@@ -46,19 +46,19 @@
 #include "config.hh"
 
 CMainWindow::CMainWindow(QWidget *p_parent) : QMainWindow(p_parent)
-, m_mainToolBar(0)
-, m_mainWidget(0)
-, m_scene(0)
-, m_timelineView(0)
-, m_treeView(0)
-, m_preferencesAct(0)
-, m_documentationAct(0)
-, m_bugsAct(0)
-, m_aboutAct(0)
-, m_exitAct(0)
-, m_openAct(0)
-, m_timeLineViewAct(0)
-, m_treeViewAct(0)
+, m_mainToolBar(nullptr)
+, m_mainWidget(nullptr)
+, m_scene(nullptr)
+, m_timelineView(nullptr)
+, m_treeView(nullptr)
+, m_preferencesAct(nullptr)
+, m_documentationAct(nullptr)
+, m_bugsAct(nullptr)
+, m_aboutAct(nullptr)
+, m_exitAct(nullptr)
+, m_openAct(nullptr)
+, m_timeLineViewAct(nullptr)
+, m_treeViewAct(nullptr)
 , m_openPath(QDir::homePath())
 , m_isInitialized(false)
 {
@@ -322,7 +322,7 @@ void CMainWindow::open(const QString & filename)
 
 void CMainWindow::open()
 {
-  QStringList filenames = QFileDialog::getOpenFileNames(0,
+  QStringList filenames = QFileDialog::getOpenFileNames(nullptr,
                                                         tr("Open data file"),
                                                         m_openPath,
                                                         tr("Text files (*.txt *.csv)"));

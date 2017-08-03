@@ -34,9 +34,9 @@
 #include "utils.hh"
 
 CTimeLineView::CTimeLineView(CScene *p_scene) : QGraphicsView()
-, m_zoomInAct(0)
-, m_zoomOutAct(0)
-, m_currentSceneItem(0)
+, m_zoomInAct(nullptr)
+, m_zoomOutAct(nullptr)
+, m_currentSceneItem(nullptr)
 , m_sessionInfo(new COverlayWidget(this))
 , m_firstSelection(new CNodeInfo(this))
 , m_secondSelection(new CNodeInfo(this))
@@ -164,12 +164,12 @@ void CTimeLineView::mousePressEvent(QMouseEvent *p_event)
       previous->setOpacity(1.0);
     }
 
-    m_currentSceneItem = 0;
-    m_firstSelection->setNode(0);
-    m_secondSelection->setNode(0);
+    m_currentSceneItem = nullptr;
+    m_firstSelection->setNode(nullptr);
+    m_secondSelection->setNode(nullptr);
     m_firstSelection->setVisible(false);
     m_secondSelection->setVisible(false);
-    emit currentNodeChanged(0);
+    emit currentNodeChanged(nullptr);
   }
 
   updateDiffInfo();

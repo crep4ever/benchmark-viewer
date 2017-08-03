@@ -40,8 +40,8 @@
 // Config Dialog
 
 ConfigDialog::ConfigDialog(QWidget *p_parent) : QDialog(p_parent)
-, m_contentsWidget(0)
-, m_pagesWidget(0)
+, m_contentsWidget(nullptr)
+, m_pagesWidget(nullptr)
 {
   m_contentsWidget = new QListWidget(this);
   m_contentsWidget->setViewMode(QListView::IconMode);

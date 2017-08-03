@@ -31,9 +31,9 @@
 #include "utils.hh"
 
 CInfoWidget::CInfoWidget(QWidget *p_parent) : QWidget(p_parent)
-  , m_node(0)
-  , m_nodeInfo(0)
-  , m_childrenInfo(0)
+  , m_node(nullptr)
+  , m_nodeInfo(nullptr)
+  , m_childrenInfo(nullptr)
   , m_mainLayout(new QVBoxLayout)
 {
   m_nodeInfo = new CNodeInfo;

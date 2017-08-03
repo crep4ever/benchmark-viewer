@@ -47,7 +47,7 @@ class ConfigDialog : public QDialog
 
 public:
   /// Constructor.
-  ConfigDialog(QWidget* parent=0);
+  ConfigDialog(QWidget* parent=nullptr);
 
   /*!
     Returns the parent widget (which is the main window of the application).
@@ -80,7 +80,7 @@ class Page : public QScrollArea
   Q_OBJECT
 public:
   /// Constructor.
-  Page(QWidget *parent=0);
+  Page(QWidget *parent=nullptr);
 
   /*!
     Returns the parent widget (which is the ConfigDialog object).
@@ -111,7 +111,7 @@ class ParserPage : public Page
 
 public:
   /// Constructor.
-  ParserPage(QWidget *parent = 0);
+  ParserPage(QWidget *parent = nullptr);
 
 private:
   void readSettings();

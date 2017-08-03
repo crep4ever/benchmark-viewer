@@ -23,7 +23,7 @@
 #include "utils.hh"
 
 CNodeInfo::CNodeInfo(QWidget *p_parent) : COverlayWidget(p_parent)
-  , m_node(0)
+  , m_node(nullptr)
   , m_displaySteps(false)
 {
   resize(sizeHint());
@@ -84,7 +84,7 @@ void CNodeInfo::update()
 void CNodeInfo::clear()
 {
   setText(QString());
-  m_node = 0;
+  m_node = nullptr;
 }
 
 bool CNodeInfo::displaySteps() const

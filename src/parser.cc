@@ -161,7 +161,7 @@ bool CParser::parse(const QString & p_fileName)
       }
 
       incompleteNodes.remove(label);
-      node = 0;
+      node = nullptr;
     }
   }
   file.close();

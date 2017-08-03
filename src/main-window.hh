@@ -44,7 +44,7 @@ class CMainWindow : public QMainWindow
 
 public:
   /// Constructor.
-  CMainWindow(QWidget *p_parent = 0);
+  CMainWindow(QWidget *p_parent = nullptr);
 
   /// Destructor.
   ~CMainWindow();

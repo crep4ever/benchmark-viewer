@@ -32,7 +32,7 @@ class COverlayWidget : public QWidget
 
 public:
   /// Constructor.
-  COverlayWidget(QWidget *parent = 0);
+  COverlayWidget(QWidget *parent = nullptr);
 
   /// Destructor.
   virtual ~COverlayWidget();

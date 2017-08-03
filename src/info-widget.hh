@@ -32,7 +32,7 @@ class CInfoWidget : public QWidget
 
 public:
   /// Constructor.
-  CInfoWidget(QWidget *p_parent = 0);
+  CInfoWidget(QWidget *p_parent = nullptr);
 
   /// Destructor.
   virtual ~CInfoWidget();
