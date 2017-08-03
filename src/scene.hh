@@ -29,7 +29,7 @@ class CScene : public QGraphicsScene
   Q_OBJECT
 
 public:
-  CScene(const QList<CNode*> & p_nodes);
+  CScene(QList<CNode*>  p_nodes);
   virtual ~CScene();
 
   QDateTime first() const;

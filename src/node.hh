@@ -27,7 +27,7 @@ class CNode;
 class CStep
 {
 public:
-  CStep(CNode *p_parent, const QString & p_label, const QDateTime & p_dateTime);
+  CStep(CNode *p_parent, QString  p_label, const QDateTime & p_dateTime);
   ~CStep();
 
   CNode *parent() const;

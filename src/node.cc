@@ -18,11 +18,12 @@
 #include "node.hh"
 
 #include <QDebug>
+#include <utility>
 #include "utils.hh"
 
-CStep::CStep(CNode *p_parent, const QString & p_label, const QDateTime & p_dateTime) :
+CStep::CStep(CNode *p_parent, QString  p_label, const QDateTime & p_dateTime) :
 m_parent(p_parent),
-m_label(p_label),
+m_label(std::move(p_label)),
 m_duration(0)
 {
   m_duration = p_dateTime.toMSecsSinceEpoch() - p_parent->startMs();

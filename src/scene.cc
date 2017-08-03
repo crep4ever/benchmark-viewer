@@ -23,13 +23,14 @@
 #include <QElapsedTimer>
 #include <QtGlobal>
 #include <QDebug>
+#include <utility>
 
 #include "tango-colors.hh"
 #include "node.hh"
 #include "graphics-node-item.hh"
 
-CScene::CScene(const QList<CNode*> & p_nodes) : QGraphicsScene()
-, m_nodes(p_nodes)
+CScene::CScene(QList<CNode*>  p_nodes) : QGraphicsScene()
+, m_nodes(std::move(p_nodes))
 {
   QElapsedTimer timer;
   timer.start();
