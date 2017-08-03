@@ -38,7 +38,7 @@ m_nodes()
   }
 }
 
-CParser::~CParser(){}
+CParser::~CParser()= default;
 
 const QList<CNode*> & CParser::nodes() const
 {

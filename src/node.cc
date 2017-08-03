@@ -29,7 +29,7 @@ m_duration(0)
   m_duration = p_dateTime.toMSecsSinceEpoch() - p_parent->startMs();
 }
 
-CStep::~CStep(){}
+CStep::~CStep()= default;
 
 CNode *CStep::parent() const
 {

@@ -78,8 +78,7 @@ CMainWindow::CMainWindow(QWidget *p_parent) : QMainWindow(p_parent)
 }
 
 CMainWindow::~CMainWindow()
-{
-}
+= default;
 
 void CMainWindow::readSettings(bool p_firstLaunch)
 {

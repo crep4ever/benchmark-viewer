@@ -70,8 +70,7 @@ CInfoWidget::CInfoWidget(QWidget *p_parent) : QWidget(p_parent)
 }
 
 CInfoWidget::~CInfoWidget()
-{
-}
+= default;
 
 QSize CInfoWidget::sizeHint() const
 {

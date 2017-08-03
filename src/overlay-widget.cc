@@ -42,8 +42,7 @@ COverlayWidget::COverlayWidget(QWidget *p_parent) : QWidget(p_parent)
 }
 
 COverlayWidget::~COverlayWidget()
-{
-}
+= default;
 
 QSize COverlayWidget::sizeHint() const
 {

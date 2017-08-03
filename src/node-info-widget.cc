@@ -30,8 +30,7 @@ CNodeInfo::CNodeInfo(QWidget *p_parent) : COverlayWidget(p_parent)
 }
 
 CNodeInfo::~CNodeInfo()
-{
-}
+= default;
 
 QSize CNodeInfo::sizeHint() const
 {
