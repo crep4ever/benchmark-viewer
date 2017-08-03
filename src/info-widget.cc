@@ -61,6 +61,7 @@ CInfoWidget::CInfoWidget(QWidget *p_parent) : QWidget(p_parent)
   m_childrenInfo->setColumnCount(4);
   m_childrenInfo->setWordWrap(true);
   m_childrenInfo->setHorizontalHeaderLabels(header);
+  m_childrenInfo->horizontalHeader()->setSectionResizeMode(0, QHeaderView::Stretch);
   m_childrenInfo->verticalHeader()->setVisible(false);
   m_childrenInfo->setShowGrid(false);
   m_childrenInfo->setVisible(false);
