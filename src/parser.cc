@@ -107,7 +107,7 @@ bool CParser::parse(const QString & p_fileName)
   while (!stream.atEnd())
   {
     QString line = stream.readLine();
-    const QStringList & tokens = line.replace("\"", "").split(separator);
+    const QStringList & tokens = line.replace(R"(")", "").split(separator);
 
     if (tokens.count() < minNumberOfTokens)
     {
