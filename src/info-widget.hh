@@ -35,12 +35,12 @@ public:
   CInfoWidget(QWidget *p_parent = nullptr);
 
   /// Destructor.
-  virtual ~CInfoWidget();
+  ~CInfoWidget() override;
 
   CNode *node() const;
 
 protected:
-  virtual QSize sizeHint() const;
+  QSize sizeHint() const override;
 
 public slots:
   void setNode(CNode *p_node);

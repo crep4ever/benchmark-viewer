@@ -28,7 +28,7 @@ class CGraphicsNodeItem : public QGraphicsRectItem
 {
 public:
   CGraphicsNodeItem();
-  virtual ~CGraphicsNodeItem();
+  ~CGraphicsNodeItem() override;
 
   CNode* node() const;
   void setNode(CNode* p_node);

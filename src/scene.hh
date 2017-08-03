@@ -30,7 +30,7 @@ class CScene : public QGraphicsScene
 
 public:
   CScene(QList<CNode*>  p_nodes);
-  virtual ~CScene();
+  ~CScene() override;
 
   QDateTime first() const;
   QDateTime last() const;

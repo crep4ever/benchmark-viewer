@@ -35,13 +35,13 @@ public:
   COverlayWidget(QWidget *parent = nullptr);
 
   /// Destructor.
-  virtual ~COverlayWidget();
+  ~COverlayWidget() override;
 
   float opacity() const;
 
 protected:
-  virtual QSize sizeHint() const;
-  void paintEvent(QPaintEvent* event);
+  QSize sizeHint() const override;
+  void paintEvent(QPaintEvent* event) override;
 
 public slots:
   void setText(const QString & p_msg);

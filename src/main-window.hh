@@ -47,7 +47,7 @@ public:
   CMainWindow(QWidget *p_parent = nullptr);
 
   /// Destructor.
-  ~CMainWindow();
+  ~CMainWindow() override;
 
   void showMessage(const QString & p_message) const;
 
@@ -63,11 +63,11 @@ protected:
   /*!
     Saves settings before closing the application.
   */
-  void closeEvent(QCloseEvent *p_event);
+  void closeEvent(QCloseEvent *p_event) override;
 
-  void dropEvent(QDropEvent *p_event);
+  void dropEvent(QDropEvent *p_event) override;
 
-  void dragEnterEvent(QDragEnterEvent *p_event);
+  void dragEnterEvent(QDragEnterEvent *p_event) override;
 
 public slots:
   void open(const QString & p_filename);

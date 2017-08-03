@@ -64,7 +64,7 @@ protected:
   /*!
     Saves all pages settings before closing.
   */
-  void closeEvent(QCloseEvent *event);
+  void closeEvent(QCloseEvent *event) override;
 
 private:
   void createIcons();
@@ -96,7 +96,7 @@ protected:
   /*!
     Saves settings before closing the page.
   */
-  void closeEvent(QCloseEvent *event);
+  void closeEvent(QCloseEvent *event) override;
 
 private:
   virtual void readSettings();
@@ -114,8 +114,8 @@ public:
   ParserPage(QWidget *parent = nullptr);
 
 private:
-  void readSettings();
-  void writeSettings();
+  void readSettings() override;
+  void writeSettings() override;
 
   QLineEdit *m_dateTimeFormat;
   QLineEdit *m_tokensSeparator;

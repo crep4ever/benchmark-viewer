@@ -33,7 +33,7 @@ public:
   CNodeInfo(QWidget *p_parent = nullptr);
 
   /// Destructor.
-  virtual ~CNodeInfo();
+  ~CNodeInfo() override;
 
   CNode *node() const;
 
@@ -41,7 +41,7 @@ public:
   void setDisplaySteps(const bool p_value);
 
 protected:
-  virtual QSize sizeHint() const;
+  QSize sizeHint() const override;
 
 public slots:
   void setNode(CNode *p_node);

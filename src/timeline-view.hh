@@ -36,14 +36,14 @@ class CTimeLineView : public QGraphicsView
 
 public:
   CTimeLineView(CScene *p_scene);
-  virtual ~CTimeLineView();
+  ~CTimeLineView() override;
 
   COverlayWidget *sessionInfo() const;
 
 protected:
-  virtual void wheelEvent(QWheelEvent *p_event);
-  virtual void mousePressEvent(QMouseEvent *p_event);
-  virtual void resizeEvent(QResizeEvent *p_event);
+  void wheelEvent(QWheelEvent *p_event) override;
+  void mousePressEvent(QMouseEvent *p_event) override;
+  void resizeEvent(QResizeEvent *p_event) override;
 
 public slots:
 void zoomIn();
