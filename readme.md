@@ -21,6 +21,23 @@ Display C++ applications runtime as a timeline
 >     cd -
 >     benchmark-viewer data/example.csv
 
+## Windows with VS2015
+Pre-requisite : Visual Studio 2015 
+                Qt Installation for Visual Studio 2015 (installed for exemple in c:/Qt/QtVersion/msvc2015_64/ refered as QTDIR in the next lines)
+
+>     git clone git://github.com/crep4ever/benchmark-viewer.git
+>     cd benchmark-viewer
+>     mkdir build && cd build
+>     cmake .. -G "Visual Studio 14 2015 Win64" -DCMAKE_PREFIX_PATH="QTDIR"
+
+Open the generated solution with Visual Studio and build the sources. The binary file will be generated in the TARGET_PATH (Debug/ or Release/).
+
+To deploy the solution use the Qt deploy tool : http://doc.qt.io/qt-5/windows-deployment.html
+
+> QTDIR/bin/windeployqt TARGET_PATH/
+
+
+
 ## CMake options
 
 * CMAKE_BUILD_TYPE [ `Release` (default), `Debug`]
