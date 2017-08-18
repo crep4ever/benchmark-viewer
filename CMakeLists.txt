@@ -1,5 +1,7 @@
 cmake_minimum_required(VERSION 2.8.11)
 
+set(CMAKE_CXX_STANDARD 11)
+
 project(benchmark-viewer)
 
 # sources
@@ -80,7 +82,7 @@ message (STATUS "Compile in ${CMAKE_BUILD_TYPE} configuration")
 message (STATUS "Compile options: ${FLAGS}")
 
 # Build the main executable
-add_executable(${PROJECT_NAME} WIN32 ${PROJECT_SOURCES} ${PROJECT_RCS})
+add_executable(${PROJECT_NAME} WIN64 ${PROJECT_SOURCES} ${PROJECT_RCS})
 target_compile_options(${PROJECT_NAME} PRIVATE ${FLAGS})
 target_link_libraries(${PROJECT_NAME} ${LIBRARIES})
 
