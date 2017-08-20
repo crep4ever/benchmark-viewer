@@ -1,1 +1,1 @@
-IDI_ICON1               ICON    DISCARDABLE     "benchmark-viewer.ico"
+IDI_ICON1               ICON    DISCARDABLE     "./icons/benchmark-viewer.ico"
