@@ -126,7 +126,7 @@ int main(int argc, char *argv[])
 
   foreach (const QString & arg, arguments)
   {
-    if (QFile(arg).exists() && CMainWindow::isFilenameSupported(arg))
+    if (QFileInfo(arg).isFile() && CMainWindow::isFilenameSupported(arg))
     {
       mainWindow.open(arg);
     }
