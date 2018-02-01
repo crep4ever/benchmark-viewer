@@ -73,19 +73,29 @@ find_package(Qt5Widgets REQUIRED)
 list(APPEND LIBRARIES Qt5::Widgets)
 
 # Compiler flags
-if (NOT CMAKE_BUILD_TYPE)
-  set (CMAKE_BUILD_TYPE "Release")
+set(CMAKE_CXX_STANDARD 11)
+
+# Set a default build type if none was specified
+if (NOT CMAKE_BUILD_TYPE AND NOT CMAKE_CONFIGURATION_TYPES)
+  message(STATUS "Setting build type to 'Release' as none was specified.")
+  set(CMAKE_BUILD_TYPE Release CACHE STRING "Choose the type of build." FORCE)
+  # Set the possible values of build type for cmake-gui
+  set_property(CACHE CMAKE_BUILD_TYPE PROPERTY STRINGS "Debug" "Release")
+endif()
+
+if (CMAKE_BUILD_TYPE STREQUAL "Release")
+  set(FLAGS -g -Ofast -march=native -DNDEBUG)
+  set (CMAKE_SHARED_LINKER_FLAGS "-Wl,--as-needed,-rdynamic")
+else ()
+  set(FLAGS -g -O1 -Werror -Wall -Wextra -Wshadow -pedantic -Wnon-virtual-dtor -fno-omit-frame-pointer -fno-optimize-sibling-calls)
+  set (CMAKE_SHARED_LINKER_FLAGS "--as-needed,-rdynamic")
 endif ()
 
-if (CMAKE_BUILD_TYPE MATCHES "Release")
-  set(FLAGS -Ofast -march=native -DNDEBUG)
-elseif (CMAKE_BUILD_TYPE MATCHES "Debug")
-  set(FLAGS -g -Werror -Wall -Wextra -Wshadow -Wnon-virtual-dtor -pedantic)
-endif ()
 
-message (STATUS "Using ${CMAKE_CXX_COMPILER} compiler")
-message (STATUS "Compile in ${CMAKE_BUILD_TYPE} configuration")
-message (STATUS "Compile options: ${FLAGS}")
+message (STATUS "Build configuration: ${CMAKE_BUILD_TYPE}")
+message (STATUS "Compiler: ${CMAKE_CXX_COMPILER}")
+message (STATUS "Compiler flags: ${FLAGS}")
+message (STATUS "Linker flags: ${CMAKE_SHARED_LINKER_FLAGS}")
 
 # Build the main executable
 add_executable(${PROJECT_NAME} WIN32 ${PROJECT_SOURCES} ${PROJECT_RCS})
