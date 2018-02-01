@@ -28,7 +28,6 @@ COverlayWidget::COverlayWidget(QWidget *p_parent) : QWidget(p_parent)
   , m_opacity(0.6)
 {
   setStyleSheet("background: transparent;");
-  setAttribute(Qt::WA_TranslucentBackground);
   setWindowFlags(Qt::FramelessWindowHint);
 
   m_label->setTextInteractionFlags(Qt::TextSelectableByMouse);
