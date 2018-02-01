@@ -34,7 +34,6 @@ CInfoWidget::CInfoWidget(QWidget *p_parent) : QWidget(p_parent)
   , m_node(nullptr)
   , m_nodeInfo(nullptr)
   , m_childrenInfo(nullptr)
-  , m_mainLayout(new QVBoxLayout)
 {
   m_nodeInfo = new CNodeInfo;
   m_nodeInfo->setOpacity(1);
@@ -45,7 +44,6 @@ CInfoWidget::CInfoWidget(QWidget *p_parent) : QWidget(p_parent)
   scrollArea->setBackgroundRole(QPalette::Dark);
   scrollArea->setWidget(m_nodeInfo);
   scrollArea->setWidgetResizable(true);
-  m_mainLayout->addWidget(scrollArea);
 
   QStringList header;
   header << tr("Child");
@@ -65,9 +63,11 @@ CInfoWidget::CInfoWidget(QWidget *p_parent) : QWidget(p_parent)
   m_childrenInfo->verticalHeader()->setVisible(false);
   m_childrenInfo->setShowGrid(false);
   m_childrenInfo->setVisible(false);
-  m_mainLayout->addWidget(m_childrenInfo, 1);
 
-  setLayout(m_mainLayout);
+  QBoxLayout *mainLayout = new QVBoxLayout;
+  mainLayout->addWidget(scrollArea);
+  mainLayout->addWidget(m_childrenInfo, 1);
+  setLayout(mainLayout);
 }
 
 CInfoWidget::~CInfoWidget()

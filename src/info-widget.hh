@@ -52,7 +52,6 @@ private:
   CNode *m_node;
   CNodeInfo *m_nodeInfo;
   QTableWidget *m_childrenInfo;
-  QBoxLayout *m_mainLayout;
 };
 
 #endif  // __INFO_WIDGET_HH__
