@@ -47,7 +47,7 @@
 
 CMainWindow::CMainWindow(QWidget *p_parent) : QMainWindow(p_parent)
 , m_mainToolBar(nullptr)
-, m_mainWidget(nullptr)
+, m_mainWidget(new QSplitter)
 , m_scene(nullptr)
 , m_timelineView(nullptr)
 , m_treeView(nullptr)
@@ -71,7 +71,6 @@ CMainWindow::CMainWindow(QWidget *p_parent) : QMainWindow(p_parent)
   createToolBar();
 
   // place elements into the main window
-  m_mainWidget = new QSplitter;
   setCentralWidget(m_mainWidget);
 
   readSettings();
@@ -93,10 +92,10 @@ void CMainWindow::readSettings()
 void CMainWindow::writeSettings()
 {
   QSettings settings;
-  settings.beginGroup( "general" );
+  settings.beginGroup("general");
   settings.setValue("geometry", saveGeometry());
   settings.setValue("state", saveState());
-  settings.setValue( "openPath", m_openPath );
+  settings.setValue("openPath", m_openPath);
   settings.endGroup();
 }
 
@@ -208,6 +207,7 @@ void CMainWindow::createMenus()
 void CMainWindow::createToolBar()
 {
   m_mainToolBar = new QToolBar(tr("Benchmark"), this);
+  m_mainToolBar->setObjectName("main-toolbar");
   m_mainToolBar->setMovable(false);
   m_mainToolBar->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
   m_mainToolBar->addAction(m_openAct);
@@ -299,7 +299,7 @@ void CMainWindow::open(const QString & filename)
   m_timelineView->setVisible(m_timeLineViewAct->isChecked());
   m_mainWidget->addWidget(m_timelineView);
 
-  m_treeView = new CInfoWidget;
+  m_treeView = new CInfoWidget(this);
   connect(m_timelineView, SIGNAL(currentNodeChanged(CNode*)),
           m_treeView, SLOT(setNode(CNode*)));
   m_treeView->setVisible(m_treeViewAct->isChecked());
@@ -311,10 +311,10 @@ void CMainWindow::open(const QString & filename)
 
 void CMainWindow::open()
 {
-  QStringList filenames = QFileDialog::getOpenFileNames(nullptr,
-                                                        tr("Open data file"),
+  QStringList filenames = QFileDialog::getOpenFileNames(this,
+                                                        tr("Open data files"),
                                                         m_openPath,
-                                                        tr("Text files (*.txt *.csv)"));
+                                                        tr("Benchmark files (*.txt *.csv)"));
   foreach (const QString & filename, filenames)
   {
     if (!filename.isEmpty())
