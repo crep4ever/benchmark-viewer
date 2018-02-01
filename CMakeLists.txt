@@ -2,6 +2,14 @@ cmake_minimum_required(VERSION 2.8.11)
 
 project(benchmark-viewer)
 
+# forbid in-source build
+if ("${CMAKE_CURRENT_SOURCE_DIR}"  STREQUAL "${CMAKE_CURRENT_BINARY_DIR}")
+  message(FATAL_ERROR
+    "The project ${PROJECT_NAME} requires an out of source build. "
+    "Please create a separate binary directory and run CMake there. "
+    "For example:\n mkdir build && cd build && cmake ..")
+endif()
+
 # sources
 set(PROJECT_SOURCES
   src/main.cc
