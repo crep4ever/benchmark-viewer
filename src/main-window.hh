@@ -84,7 +84,7 @@ private slots:
   void about();
 
 private:
-  void readSettings(bool firstLaunch = false);
+  void readSettings();
   void writeSettings();
 
   void createActions();

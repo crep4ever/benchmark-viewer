@@ -74,25 +74,18 @@ CMainWindow::CMainWindow(QWidget *p_parent) : QMainWindow(p_parent)
   m_mainWidget = new QSplitter;
   setCentralWidget(m_mainWidget);
 
-  readSettings(true);
+  readSettings();
 }
 
 CMainWindow::~CMainWindow()
 = default;
 
-void CMainWindow::readSettings(bool p_firstLaunch)
+void CMainWindow::readSettings()
 {
   QSettings settings;
   settings.beginGroup("general");
-  if (p_firstLaunch)
-  {
-    resize(settings.value("size", QSize(800,600)).toSize());
-    move(settings.value("pos", QPoint(200, 200)).toPoint());
-    if (settings.value("maximized", isMaximized()).toBool())
-    {
-      showMaximized();
-    }
-  }
+  restoreGeometry(settings.value("geometry").toByteArray());
+  restoreState(settings.value("state").toByteArray());
   m_openPath = settings.value("openPath", QDir::homePath()).toString();
   settings.endGroup();
 }
@@ -101,12 +94,8 @@ void CMainWindow::writeSettings()
 {
   QSettings settings;
   settings.beginGroup( "general" );
-  settings.setValue( "maximized", isMaximized() );
-  if (!isMaximized())
-  {
-    settings.setValue( "pos", pos() );
-    settings.setValue( "size", size() );
-  }
+  settings.setValue("geometry", saveGeometry());
+  settings.setValue("state", saveState());
   settings.setValue( "openPath", m_openPath );
   settings.endGroup();
 }
